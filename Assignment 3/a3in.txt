@@ -1,0 +1,261 @@
+#------------------------------------
+# CS 218 - Assignment #3
+#   Debugger Script File
+#------------------------------------
+echo \n\n
+break last
+run
+set pagination off
+set logging file a3out.txt
+set logging overwrite
+set logging on
+set prompt
+echo ------------------------------------ \n
+echo display byte calculation variables \n
+echo bnum1: \t\t
+x/db &bnum1
+echo bnum2: \t\t
+x/db &bnum2
+echo bnum3: \t\t
+x/db &bnum3
+echo bnum4: \t\t
+x/db &bnum4
+echo bnum5: \t\t
+x/db &bnum5
+echo bnum6: \t\t
+x/db &bnum6
+echo bans1: \t\t
+x/db &bans1
+echo bans2: \t\t
+x/db &bans2
+echo bans3: \t\t
+x/db &bans3
+echo bans4: \t\t
+x/db &bans4
+echo bans5: \t\t
+x/db &bans5
+echo bans6: \t\t
+x/db &bans6
+echo bans7: \t\t
+x/db &bans7
+echo bans8: \t\t
+x/db &bans8
+echo bans9: \t\t
+x/db &bans9
+echo bans10: \t
+x/db &bans10
+echo wans11: \t
+x/dh &wans11
+echo wans12: \t
+x/dh &wans12
+echo wans13: \t
+x/dh &wans13
+echo wans14: \t
+x/dh &wans14
+echo wans15: \t
+x/dh &wans15
+echo bans16: \t
+x/db &bans16
+echo bans17: \t
+x/db &bans17
+echo bans18: \t
+x/db &bans18
+echo brem18: \t
+x/db &brem18
+echo bans19: \t
+x/db &bans19
+echo bans20: \t
+x/db &bans20
+echo bans21: \t
+x/db &bans21
+echo brem21: \t
+x/db &brem21
+echo \n
+echo ------------------------------------ \n
+echo display word calculation variables \n
+echo wnum1: \t\t
+x/dh &wnum1
+echo wnum2: \t\t
+x/dh &wnum2
+echo wnum3: \t\t
+x/dh &wnum3
+echo wnum4: \t\t
+x/dh &wnum4
+echo wnum5: \t\t
+x/dh &wnum5
+echo wnum6: \t\t
+x/dh &wnum6
+echo wans1: \t\t
+x/dh &wans1
+echo wans2: \t\t
+x/dh &wans2
+echo wans3: \t\t
+x/dh &wans3
+echo wans4: \t\t
+x/dh &wans4
+echo wans5: \t\t
+x/dh &wans5
+echo wans6: \t\t
+x/dh &wans6
+echo wans7: \t\t
+x/dh &wans7
+echo wans8: \t\t
+x/dh &wans8
+echo wans9: \t\t
+x/dh &wans9
+echo wans10: \t
+x/dh &wans10
+echo dans11: \t
+x/dw &dans11
+echo dans12: \t
+x/dw &dans12
+echo dans13: \t
+x/dw &dans13
+echo dans14: \t
+x/dw &dans14
+echo dans15: \t
+x/dw &dans15
+echo wans16: \t
+x/dh &wans16
+echo wans17: \t
+x/dh &wans17
+echo wans18: \t
+x/dh &wans18
+echo wrem18: \t
+x/dh &wrem18
+echo wans19: \t
+x/dh &wans19
+echo wans20: \t
+x/dh &wans20
+echo wans21: \t
+x/dh &wans21
+echo wrem21: \t
+x/dh &wrem21
+echo \n
+echo ------------------------------------ \n
+echo display double-word calculation variables \n
+echo dnum1: \t\t
+x/dw &dnum1
+echo dnum2: \t\t
+x/dw &dnum2
+echo dnum3: \t\t
+x/dw &dnum3
+echo dnum4: \t\t
+x/dw &dnum4
+echo dnum5: \t\t
+x/dw &dnum5
+echo dnum6: \t\t
+x/dw &dnum6
+echo dans1: \t\t
+x/dw &dans1
+echo dans2: \t\t
+x/dw &dans2
+echo dans3: \t\t
+x/dw &dans3
+echo dans4: \t\t
+x/dw &dans4
+echo dans5: \t\t
+x/dw &dans5
+echo dans6: \t\t
+x/dw &dans6
+echo dans7: \t\t
+x/dw &dans7
+echo dans8: \t\t
+x/dw &dans8
+echo dans9: \t\t
+x/dw &dans9
+echo dans10: \t
+x/dw &dans10
+echo qans11: \t
+x/dg &qans11
+echo qans12: \t
+x/dg &qans12
+echo qans13: \t
+x/dg &qans13
+echo qans14: \t
+x/dg &qans14
+echo qans15: \t
+x/dg &qans15
+echo dans16: \t
+x/dw &dans16
+echo dans17: \t
+x/dw &dans17
+echo dans18: \t
+x/dw &dans18
+echo drem18: \t
+x/dw &drem18
+echo dans19: \t
+x/dw &dans19
+echo dans20: \t
+x/dw &dans20
+echo dans21: \t
+x/dw &dans21
+echo drem21: \t
+x/dw &drem21
+echo \n
+echo ------------------------------------ \n
+echo display quadword calculation variables \n
+echo qnum1: \t\t
+x/dg &qnum1
+echo qnum2: \t\t
+x/dg &qnum2
+echo qnum3: \t\t
+x/dg &qnum3
+echo qnum4: \t\t
+x/dg &qnum4
+echo qnum5: \t\t
+x/dg &qnum5
+echo qnum6: \t\t
+x/dg &qnum6
+echo qans1: \t\t
+x/dg &qans1
+echo qans2: \t\t
+x/dg &qans2
+echo qans3: \t\t
+x/dg &qans3
+echo qans4: \t\t
+x/dg &qans4
+echo qans5: \t\t
+x/dg &qans5
+echo qans6: \t\t
+x/dg &qans6
+echo qans7: \t\t
+x/dg &qans7
+echo qans8: \t\t
+x/dg &qans8
+echo qans9: \t\t
+x/dg &qans9
+echo qans10: \t
+x/dg &qans10
+echo dqans11: \t
+x/dg &dqans11
+echo dqans12: \t
+x/dg &dqans12
+echo dqans13: \t
+x/dg &dqans13
+echo dqans14: \t
+x/dg &dqans14
+echo dqans15: \t
+x/dg &dqans15
+echo qans16: \t
+x/dg &qans16
+echo qans17: \t
+x/dg &qans17
+echo qans18: \t
+x/dg &qans18
+echo qrem18: \t
+x/dg &qrem18
+echo qans19: \t
+x/dg &qans19
+echo qans20: \t
+x/dg &qans20
+echo qans21: \t
+x/dg &qans21
+echo qrem21: \t
+x/dg &qrem21
+echo \n
+echo ------------------------------------ \n
+echo \n \n
+set logging off
+quit
+
