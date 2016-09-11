@@ -1,0 +1,131 @@
+------------------------------------ 
+display byte calculation variables 
+bnum1: 		0x60092c:	29
+bnum2: 		0x60092d:	19
+bnum3: 		0x60092e:	13
+bnum4: 		0x60092f:	12
+bnum5: 		0x600930:	-7
+bnum6: 		0x600931:	-15
+bans1: 		0x600932:	32
+bans2: 		0x600933:	41
+bans3: 		0x600934:	31
+bans4: 		0x600935:	14
+bans5: 		0x600936:	12
+bans6: 		0x600937:	17
+bans7: 		0x600938:	6
+bans8: 		0x600939:	1
+bans9: 		0x60093a:	8
+bans10: 	0x60093b:	-27
+wans11: 	0x60093c:	247
+wans12: 	0x60093e:	551
+wans13: 	0x600940:	156
+wans14: 	0x600942:	-84
+wans15: 	0x600944:	105
+bans16: 	0x600946:	2
+bans17: 	0x600947:	1
+bans18: 	0x600948:	2
+brem18: 	0x600949:	9
+bans19: 	0x60094a:	-1
+bans20: 	0x60094b:	2
+bans21: 	0x60094c:	4
+brem21: 	0x60094d:	11
+
+------------------------------------ 
+display word calculation variables 
+wnum1: 		0x60094e:	127
+wnum2: 		0x600950:	276
+wnum3: 		0x600952:	47
+wnum4: 		0x600954:	6218
+wnum5: 		0x600956:	-235
+wnum6: 		0x600958:	-59
+wans1: 		0x60095a:	6265
+wans2: 		0x60095c:	403
+wans3: 		0x60095e:	174
+wans4: 		0x600960:	41
+wans5: 		0x600962:	-294
+wans6: 		0x600964:	6091
+wans7: 		0x600966:	229
+wans8: 		0x600968:	80
+wans9: 		0x60096a:	186
+wans10: 	0x60096c:	176
+dans11: 	0x60096e:	5969
+dans12: 	0x600972:	12972
+dans13: 	0x600976:	292246
+dans14: 	0x60097a:	65535
+dans15: 	0x60097e:	65535
+wans16: 	0x600982:	5
+wans17: 	0x600984:	48
+wans18: 	0x600986:	35
+wrem18: 	0x600988:	155
+wans19: 	0x60098a:	-26
+wans20: 	0x60098c:	-4
+wans21: 	0x60098e:	-41
+wrem21: 	0x600990:	180
+
+------------------------------------ 
+display double-word calculation variables 
+dnum1: 		0x600992:	2034915
+dnum2: 		0x600996:	5871
+dnum3: 		0x60099a:	9815
+dnum4: 		0x60099e:	42338
+dnum5: 		0x6009a2:	-2703
+dnum6: 		0x6009a6:	-249
+dans1: 		0x6009aa:	2044730
+dans2: 		0x6009ae:	52153
+dans3: 		0x6009b2:	2040786
+dans4: 		0x6009b6:	3168
+dans5: 		0x6009ba:	-2952
+dans6: 		0x6009be:	2029044
+dans7: 		0x6009c2:	2025100
+dans8: 		0x6009c6:	36467
+dans9: 		0x6009ca:	3944
+dans10: 	0x6009ce:	-2454
+qans11: 	0x6009d2:	34468641
+qans12: 	0x6009da:	11946985965
+qans13: 	0x6009e2:	248566398
+qans14: 	0x6009ea:	673047
+qans15: 	0x6009f2:	673047
+dans16: 	0x6009fa:	48
+dans17: 	0x6009fe:	1
+dans18: 	0x600a02:	2034915
+drem18: 	0x600a06:	0
+dans19: 	0x600a0a:	-15
+dans20: 	0x600a0e:	10
+dans21: 	0x600a12:	-12751
+drem21: 	0x600a16:	2688
+
+------------------------------------ 
+display quadword calculation variables 
+qnum1: 		0x600a1a:	13147826
+qnum2: 		0x600a22:	24983
+qnum3: 		0x600a2a:	518747
+qnum4: 		0x600a32:	161227
+qnum5: 		0x600a3a:	-17517
+qnum6: 		0x600a42:	2258
+qans1: 		0x600a4a:	13666573
+qans2: 		0x600a52:	679974
+qans3: 		0x600a5a:	13172809
+qans4: 		0x600a62:	7466
+qans5: 		0x600a6a:	-15259
+qans6: 		0x600a72:	13122843
+qans7: 		0x600a7a:	12629079
+qans8: 		0x600a82:	136244
+qans9: 		0x600a8a:	493764
+qans10: 	0x600a92:	-19775
+dqans11: 	0x600a9a:	624150289
+dqans12: 	0x600aaa:	328472136958
+dqans13: 	0x600aba:	4027934141
+dqans14: 	0x600aca:	-39553386
+dqans15: 	0x600ada:	56411614
+qans16: 	0x600aea:	81
+qans17: 	0x600af2:	20
+qans18: 	0x600afa:	13147826
+qrem18: 	0x600b02:	0
+qans19: 	0x600b0a:	-9
+qans20: 	0x600b12:	-7
+qans21: 	0x600b1a:	-35631
+qrem21: 	0x600b22:	2062
+
+------------------------------------ 
+
+ 
