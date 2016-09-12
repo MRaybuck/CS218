@@ -10,6 +10,9 @@
 ;  Additionally, the program will also find the sum, count, and integer average for the even numbers.
 ;  The program will also find the sum, count, and integer average for the numbers that are evenly divisble by 8.
 
+; NOTE: Since the length of the array is 100, the exact middle is 50. In order to estimate the median value,
+; a choice has to be made which two "middle values" to use (e.g. either 50 and 51  or 49 and 50). This program
+; will use the values found at 49 and 50.
 
 ; *****************************************************************
 ;  Data Declarations
@@ -65,13 +68,88 @@ eightCnt	dd	0
 eightSum	dd	0
 eightAve	dd	0
 
+; -----
+; Additional declarations to find estMed
 
+lstFirst	dd  0
+lstLast		dd  0
+lstMid1		dd  0
+lstMid2		dd  0
 
 ; *****************************************************************
 
 section	.text
 global _start
 _start:
+
+; -----
+; Populate lstMin and lstMax with first element of lst.
+
+	mov eax, dword [lst]
+	mov dword [lstMin], eax
+	mov dword [lstMax], eax
+
+; -----
+;  Create lst pointer in rdx.
+
+	mov rdx, lst
+
+; -----
+; Initialize rcx and store lst length in ecx to be used as loop decrement.
+
+	mov rcx, 0
+	mov ecx, dword [length]
+
+; -----
+; Calculate the Sum, find the min, and find the max.
+
+	CalcLoop:
+			
+			; -----
+			; Move next value of lst into eax
+			
+			mov eax, dword[rbx]
+
+			; -----
+			; Keep a running sum of all the values
+			
+			add dword[lstSum], eax
+
+			; -----
+			; If (eax >= dword [lstMin]) then jump to minDone
+			
+			cmp eax, dword[lstMin]
+			jae minDone
+				mov dword[lstMin], eax
+
+		minDone:
+
+			; -----
+			; If (eax <= dword [lstMax]) then jump to maxDone
+			
+			cmp eax, dword [lstMax]
+			jbe maxDone
+				mov dword [lstMax], eax
+
+		maxDone:
+
+			; -----
+			; Increment pointer so it points to the next element in the lst array.
+			
+			add rbx, 4
+
+	loop CalcLoop
+	; dec rcx
+	; cmp rcx, 0
+	; jne CalcLoop
+
+	; -----
+	; Calculate the average
+
+	mov edx, 0
+	mov eax, dword [lstSum]
+	div 	 dword [length]
+	mov dword [lstAve], eax
 
 
 
