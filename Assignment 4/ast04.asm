@@ -99,16 +99,6 @@ _start:
 	add dword [estMed], eax
 
 ; -----
-; Move 8 into r8 for checking if divisble by 8
-
-	mov r8d, 8
-
-; -----
-; Move 2 into r7 for checking if divisble by 2
-
-	mov r9d, 2
-
-; -----
 ; Calculate the Sum, find the min, and find the max.
 
 	CalcLoop:
@@ -163,6 +153,64 @@ _start:
 		NotLast:
 
 			; -----
+			; Increment pointer so it points to the next element in the lst array.
+			
+			add rbx, 4
+
+	loop CalcLoop
+	; dec rcx
+	; cmp rcx, 0
+	; jne CalcLoop
+
+; -----
+; Calculate the average
+
+	mov edx, 0
+	mov eax, dword [lstSum]
+	div 	 dword [length]
+	mov dword [lstAve], eax
+
+; -----
+; Finish calculations for the estmated median
+
+	mov edx, 0
+	mov eax, dword [estMed]
+	mov ecx, 4
+	div 	ecx
+	mov dword [estMed], eax
+
+; -----
+; Move 8 into r8 for checking if divisble by 8
+
+	mov r8d, 8
+
+; -----
+; Move 2 into r7 for checking if divisble by 2
+
+	mov r9d, 2
+
+; -----
+;  Since the loop instruction can only handle 127 bytes of information I have to do another loop
+;  just to finish up the Evens and Eights calculations. :(
+;  Create lst pointer in rdx.
+
+	mov rbx, lst
+
+; -----
+; Initialize rcx and store lst length in ecx to be used as loop decrement.
+
+	mov rcx, 0
+	mov ecx, dword [length]
+
+
+	CalcEvensAndEights:
+
+			; -----
+			; Move next value of lst into eax
+			
+			mov eax, dword [rbx]
+
+			; -----
 			; Check if divisble by 8
 
 			mov edx, 0
@@ -194,28 +242,20 @@ _start:
 			
 			add rbx, 4
 
-	; loop CalcLoop
-	dec rcx
-	cmp rcx, 0
-	jz CalcLoop
+	loop CalcEvensAndEights
 
 ; -----
-; Calculate the average
+; Get the averages for evens and eights
 
 	mov edx, 0
-	mov eax, dword [lstSum]
-	div 	 dword [length]
-	mov dword [lstAve], eax
-
-; -----
-; Finish calculations for the estmated median
+	mov eax, dword [eightSum]
+	div 	 dword [eightCnt]
+	mov dword [eightAve], eax
 
 	mov edx, 0
-	mov eax, dword [estMed]
-	mov ecx, 4
-	div 	ecx
-	mov dword [estMed], eax
-
+	mov eax, dword [evenSum]
+	div 	 dword [evenCnt]
+	mov dword [evenAve], eax
 
 
 ; *****************************************************************

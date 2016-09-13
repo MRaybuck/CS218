@@ -142,128 +142,168 @@
    142                                 
    143                                 
    144                                 
-   145 00000033 41B808000000            mov r8d, 8
+   145                                  CalcLoop:
    146                                 
    147                                 
    148                                 
    149                                 
-   150 00000039 41B902000000            mov r9d, 2
+   150 00000033 8B03                    mov eax, dword [rbx]
    151                                 
    152                                 
    153                                 
    154                                 
-   155                                  CalcLoop:
+   155 00000035 010425[00000000]        add dword [lstSum], eax
    156                                 
    157                                 
    158                                 
    159                                 
-   160 0000003F 8B03                    mov eax, dword [rbx]
-   161                                 
-   162                                 
+   160 0000003C 3B0425[00000000]        cmp eax, dword [lstMin]
+   161 00000043 7305                    jae minDone
+   162 00000045 890425[00000000]        mov dword [lstMin], eax
    163                                 
-   164                                 
-   165 00000041 010425[00000000]        add dword [lstSum], eax
+   164                                  minDone:
+   165                                 
    166                                 
    167                                 
    168                                 
-   169                                 
-   170 00000048 3B0425[00000000]        cmp eax, dword [lstMin]
-   171 0000004F 7305                    jae minDone
-   172 00000051 890425[00000000]        mov dword [lstMin], eax
-   173                                 
-   174                                  minDone:
+   169 0000004C 3B0425[00000000]        cmp eax, dword [lstMax]
+   170 00000053 7605                    jbe maxDone
+   171 00000055 890425[00000000]        mov dword [lstMax], eax
+   172                                 
+   173                                  maxDone:
+   174                                 
    175                                 
    176                                 
    177                                 
-   178                                 
-   179 00000058 3B0425[00000000]        cmp eax, dword [lstMax]
-   180 0000005F 7605                    jbe maxDone
-   181 00000061 890425[00000000]        mov dword [lstMax], eax
-   182                                 
-   183                                  maxDone:
-   184                                 
-   185                                 
-   186                                 
+   178 0000005C 4883F934                cmp rcx, 52
+   179 00000060 7505                    jne NotMid1
+   180 00000062 010425[00000000]        add dword [estMed], eax
+   181                                 
+   182                                  NotMid1:
+   183                                 
+   184 00000069 4883F933                cmp rcx, 51
+   185 0000006D 7505                    jne NotMid2
+   186 0000006F 010425[00000000]        add dword [estMed], eax
    187                                 
-   188 00000068 4883F934                cmp rcx, 52
-   189 0000006C 7505                    jne NotMid1
-   190 0000006E 010425[00000000]        add dword [estMed], eax
-   191                                 
-   192                                  NotMid1:
+   188                                  NotMid2:
+   189                                 
+   190 00000076 4883F901                cmp rcx, 1
+   191 0000007A 7505                    jne NotLast
+   192 0000007C 010425[00000000]        add dword [estMed], eax
    193                                 
-   194 00000075 4883F933                cmp rcx, 51
-   195 00000079 7505                    jne NotMid2
-   196 0000007B 010425[00000000]        add dword [estMed], eax
+   194                                  NotLast:
+   195                                 
+   196                                 
    197                                 
-   198                                  NotMid2:
-   199                                 
-   200 00000082 4883F901                cmp rcx, 1
-   201 00000086 7505                    jne NotLast
-   202 00000088 010425[00000000]        add dword [estMed], eax
+   198                                 
+   199 00000083 4883C304                add rbx, 4
+   200                                 
+   201 00000087 E2A8                    loop CalcLoop
+   202                                 
    203                                 
-   204                                  NotLast:
+   204                                 
    205                                 
    206                                 
    207                                 
    208                                 
-   209 0000008F BA00000000              mov edx, 0
-   210 00000094 41F7F0                  div r8d
-   211 00000097 83FA00                  cmp edx, 0
-   212 0000009A 750F                    jne notdivby8
-   213 0000009C 8B03                    mov eax, dword [rbx]
-   214 0000009E 010425[00000000]        add dword [eightSum], eax
-   215 000000A5 830425[00000000]01      add dword [eightCnt], 1
+   209 00000089 BA00000000              mov edx, 0
+   210 0000008E 8B0425[00000000]        mov eax, dword [lstSum]
+   211 00000095 F73425[00000000]        div dword [length]
+   212 0000009C 890425[00000000]        mov dword [lstAve], eax
+   213                                 
+   214                                 
+   215                                 
    216                                 
-   217                                  notdivby8:
-   218                                 
-   219                                 
-   220                                 
-   221                                 
-   222 000000AD 8B03                    mov eax, dword [rbx]
-   223 000000AF BA00000000              mov edx, 0
-   224 000000B4 41F7F1                  div r9d
-   225 000000B7 83FA00                  cmp edx, 0
-   226 000000BA 750F                    jne notdivby2
-   227 000000BC 8B03                    mov eax, dword [rbx]
-   228 000000BE 010425[00000000]        add dword [evenSum], eax
-   229 000000C5 830425[00000000]01      add dword [evenCnt], 1
+   217 000000A3 BA00000000              mov edx, 0
+   218 000000A8 8B0425[00000000]        mov eax, dword [estMed]
+   219 000000AF B904000000              mov ecx, 4
+   220 000000B4 F7F1                    div ecx
+   221 000000B6 890425[00000000]        mov dword [estMed], eax
+   222                                 
+   223                                 
+   224                                 
+   225                                 
+   226 000000BD 41B808000000            mov r8d, 8
+   227                                 
+   228                                 
+   229                                 
    230                                 
-   231                                  notdivby2:
+   231 000000C3 41B902000000            mov r9d, 2
    232                                 
    233                                 
    234                                 
    235                                 
-   236 000000CD 4883C304                add rbx, 4
+   236                                 
    237                                 
-   238                                 
-   239 000000D1 48FFC9                  dec rcx
-   240 000000D4 4883F900                cmp rcx, 0
-   241 000000D8 0F845BFFFFFF            jz CalcLoop
+   238 000000C9 48C7C3[00000000]        mov rbx, lst
+   239                                 
+   240                                 
+   241                                 
    242                                 
-   243                                 
-   244                                 
+   243 000000D0 48C7C100000000          mov rcx, 0
+   244 000000D7 8B0C25[00000000]        mov ecx, dword [length]
    245                                 
-   246 000000DE BA00000000              mov edx, 0
-   247 000000E3 8B0425[00000000]        mov eax, dword [lstSum]
-   248 000000EA F73425[00000000]        div dword [length]
-   249 000000F1 890425[00000000]        mov dword [lstAve], eax
+   246                                 
+   247                                  CalcEvensAndEights:
+   248                                 
+   249                                 
    250                                 
    251                                 
-   252                                 
+   252 000000DE 8B03                    mov eax, dword [rbx]
    253                                 
-   254 000000F8 BA00000000              mov edx, 0
-   255 000000FD 8B0425[00000000]        mov eax, dword [estMed]
-   256 00000104 B904000000              mov ecx, 4
-   257 00000109 F7F1                    div ecx
-   258 0000010B 890425[00000000]        mov dword [estMed], eax
-   259                                 
-   260                                 
-   261                                 
-   262                                 
-   263                                 
+   254                                 
+   255                                 
+   256                                 
+   257 000000E0 BA00000000              mov edx, 0
+   258 000000E5 41F7F0                  div r8d
+   259 000000E8 83FA00                  cmp edx, 0
+   260 000000EB 750F                    jne notdivby8
+   261 000000ED 8B03                    mov eax, dword [rbx]
+   262 000000EF 010425[00000000]        add dword [eightSum], eax
+   263 000000F6 830425[00000000]01      add dword [eightCnt], 1
    264                                 
-   265                                 last:
-   266 00000112 B83C000000              mov eax, SYS_exit
-   267 00000117 BB00000000              mov ebx, EXIT_SUCCESS
-   268 0000011C 0F05                    syscall
+   265                                  notdivby8:
+   266                                 
+   267                                 
+   268                                 
    269                                 
+   270 000000FE 8B03                    mov eax, dword [rbx]
+   271 00000100 BA00000000              mov edx, 0
+   272 00000105 41F7F1                  div r9d
+   273 00000108 83FA00                  cmp edx, 0
+   274 0000010B 750F                    jne notdivby2
+   275 0000010D 8B03                    mov eax, dword [rbx]
+   276 0000010F 010425[00000000]        add dword [evenSum], eax
+   277 00000116 830425[00000000]01      add dword [evenCnt], 1
+   278                                 
+   279                                  notdivby2:
+   280                                 
+   281                                 
+   282                                 
+   283                                 
+   284 0000011E 4883C304                add rbx, 4
+   285                                 
+   286 00000122 E2B8                    loop CalcEvensAndEights
+   287                                 
+   288                                 
+   289                                 
+   290                                 
+   291 00000124 BA00000000              mov edx, 0
+   292 00000129 8B0425[00000000]        mov eax, dword [eightSum]
+   293 00000130 F73425[00000000]        div dword [eightCnt]
+   294 00000137 890425[00000000]        mov dword [eightAve], eax
+   295                                 
+   296 0000013E BA00000000              mov edx, 0
+   297 00000143 8B0425[00000000]        mov eax, dword [evenSum]
+   298 0000014A F73425[00000000]        div dword [evenCnt]
+   299 00000151 890425[00000000]        mov dword [evenAve], eax
+   300                                 
+   301                                 
+   302                                 
+   303                                 
+   304                                 
+   305                                 last:
+   306 00000158 B83C000000              mov eax, SYS_exit
+   307 0000015D BB00000000              mov ebx, EXIT_SUCCESS
+   308 00000162 0F05                    syscall
+   309                                 
