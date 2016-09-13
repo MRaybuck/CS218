@@ -68,14 +68,6 @@ eightCnt	dd	0
 eightSum	dd	0
 eightAve	dd	0
 
-; -----
-; Additional declarations to find estMed
-
-lstFirst	dd  0
-lstLast		dd  0
-lstMid1		dd  0
-lstMid2		dd  0
-
 ; *****************************************************************
 
 section	.text
@@ -92,13 +84,29 @@ _start:
 ; -----
 ;  Create lst pointer in rdx.
 
-	mov rdx, lst
+	mov rbx, lst
 
 ; -----
 ; Initialize rcx and store lst length in ecx to be used as loop decrement.
 
 	mov rcx, 0
 	mov ecx, dword [length]
+
+; -----
+; Sum the first element for the est. median
+
+	mov eax, dword [rbx]
+	add dword [estMed], eax
+
+; -----
+; Move 8 into r8 for checking if divisble by 8
+
+	mov r8d, 8
+
+; -----
+; Move 2 into r7 for checking if divisble by 2
+
+	mov r9d, 2
 
 ; -----
 ; Calculate the Sum, find the min, and find the max.
@@ -108,19 +116,19 @@ _start:
 			; -----
 			; Move next value of lst into eax
 			
-			mov eax, dword[rbx]
+			mov eax, dword [rbx]
 
 			; -----
 			; Keep a running sum of all the values
 			
-			add dword[lstSum], eax
+			add dword [lstSum], eax
 
 			; -----
 			; If (eax >= dword [lstMin]) then jump to minDone
 			
-			cmp eax, dword[lstMin]
+			cmp eax, dword [lstMin]
 			jae minDone
-				mov dword[lstMin], eax
+				mov dword [lstMin], eax
 
 		minDone:
 
@@ -134,22 +142,79 @@ _start:
 		maxDone:
 
 			; -----
+			; Sum the last element, and the two middle elements for the est. median
+
+			cmp rcx, 52
+			jne NotMid1
+				add dword [estMed], eax
+
+		NotMid1:
+
+			cmp rcx, 51
+			jne NotMid2
+				add dword [estMed], eax
+
+		NotMid2:
+
+			cmp rcx, 1
+			jne NotLast
+				add dword [estMed], eax
+
+		NotLast:
+
+			; -----
+			; Check if divisble by 8
+
+			mov edx, 0
+			div r8d
+			cmp edx, 0
+			jne notdivby8
+				mov eax, dword [rbx]
+				add dword [eightSum], eax
+				add dword [eightCnt], 1
+
+		notdivby8:
+
+			; -----
+			; Check if divisble by 2
+
+			mov eax, dword [rbx]
+			mov edx, 0
+			div r9d
+			cmp edx, 0
+			jne notdivby2
+				mov eax, dword [rbx]
+				add dword [evenSum], eax
+				add dword [evenCnt], 1
+
+		notdivby2:
+
+			; -----
 			; Increment pointer so it points to the next element in the lst array.
 			
 			add rbx, 4
 
-	loop CalcLoop
-	; dec rcx
-	; cmp rcx, 0
-	; jne CalcLoop
+	; loop CalcLoop
+	dec rcx
+	cmp rcx, 0
+	jz CalcLoop
 
-	; -----
-	; Calculate the average
+; -----
+; Calculate the average
 
 	mov edx, 0
 	mov eax, dword [lstSum]
 	div 	 dword [length]
 	mov dword [lstAve], eax
+
+; -----
+; Finish calculations for the estmated median
+
+	mov edx, 0
+	mov eax, dword [estMed]
+	mov ecx, 4
+	div 	ecx
+	mov dword [estMed], eax
 
 
 
