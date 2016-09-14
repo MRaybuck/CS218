@@ -247,7 +247,7 @@
    247 000000D6 488B0C25[00000000]      mov rcx, qword[length]
    248                                 
    249                                 
-   250 000000DE 6641BE0200              mov r14w, 2
+   250 000000DE 41BE02000000            mov r14d, 2
    251                                 
    252                                 
    253                                 
@@ -257,13 +257,13 @@
    257                                 
    258                                 
    259                                 
-   260 000000E3 668B8436[00000000]      mov ax, word [x2 + rsi * 2]
-   261 000000EB 660FBE9E[00000000]      movsx bx, byte [x1 + rsi]
+   260 000000E4 668B8436[00000000]      mov ax, word [x2 + rsi * 2]
+   261 000000EC 660FBE9E[00000000]      movsx bx, byte [x1 + rsi]
    262                                 
-   263 000000F3 6601D8                  add ax, bx
+   263 000000F4 6601D8                  add ax, bx
    264                                 
-   265 000000F6 6699                    cwd
-   266 000000F8 6641F7FE                idiv r14w
+   265 000000F7 6699                    cwd
+   266 000000F9 41F7FE                  idiv r14d
    267                                 
    268 000000FC 66898436[00000000]      mov word [xMid + rsi * 2], ax
    269                                 
@@ -276,20 +276,23 @@
    276 00000114 6601D8                  add ax, bx
    277                                 
    278 00000117 6699                    cwd
-   279 00000119 6641F7FE                idiv r14w
+   279 00000119 41F7FE                  idiv r14d
    280                                 
-   281 0000011D 66898436[00000000]      mov word [yMid + rsi * 2], ax
+   281 0000011C 66898436[00000000]      mov word [yMid + rsi * 2], ax
    282                                 
    283                                 
    284                                 
-   285 00000125 E2BA                   loop Midloop
-   286                                 
+   285                                 
+   286 00000124 48FFC6                  inc rsi
    287                                 
-   288                                 
+   288 00000127 E2B9                   loop Midloop
    289                                 
    290                                 
-   291                                 last:
-   292 00000127 B83C000000              mov eax, SYS_exit
-   293 0000012C BB00000000              mov ebx, EXIT_SUCCESS
-   294 00000131 0F05                    syscall
-   295                                 
+   291                                 
+   292                                 
+   293                                 
+   294                                 last:
+   295 00000129 B83C000000              mov eax, SYS_exit
+   296 0000012E BB00000000              mov ebx, EXIT_SUCCESS
+   297 00000133 0F05                    syscall
+   298                                 

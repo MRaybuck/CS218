@@ -226,7 +226,7 @@ loop DistLoop
 	mov rcx, qword[length]
 ; -----
 ; For midpoint division
-	mov r14w, 2
+	mov r14d, 2
 
 ; -----
 ; Calculate Midpoints
@@ -242,7 +242,7 @@ Midloop:
 		add ax, bx
 
 		cwd
-		idiv 	 r14w
+		idiv 	 r14d
 
 		mov word [xMid + rsi * 2], ax
 
@@ -255,7 +255,7 @@ Midloop:
 		add ax, bx
 
 		cwd
-		idiv	 r14w
+		idiv	 r14d
 
 		mov word [yMid + rsi * 2], ax
 
