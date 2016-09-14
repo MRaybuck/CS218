@@ -290,9 +290,179 @@
    290                                 
    291                                 
    292                                 
-   293                                 
-   294                                 last:
-   295 00000129 B83C000000              mov eax, SYS_exit
-   296 0000012E BB00000000              mov ebx, EXIT_SUCCESS
-   297 00000133 0F05                    syscall
+   293 00000129 48C7C3[00000000]        mov rbx, slopes
+   294 00000130 48C7C100000000          mov rcx, 0
+   295 00000137 488B0C25[00000000]      mov rcx, qword [length]
+   296                                 
+   297                                 
    298                                 
+   299                                 
+   300 0000013F 8B0425[00000000]        mov eax, dword [slopes]
+   301 00000146 010425[00000000]        add dword [slpEstMed], eax
+   302                                 
+   303                                 
+   304                                 
+   305                                 
+   306                                 SlpCalcLoop:
+   307                                 
+   308                                 
+   309                                 
+   310                                 
+   311 0000014D 8B03                    mov eax, dword [rbx]
+   312                                 
+   313                                 
+   314                                 
+   315                                 
+   316 0000014F 010425[00000000]        add dword [slpSum], eax
+   317                                 
+   318                                 
+   319                                 
+   320                                 
+   321 00000156 3B0425[00000000]        cmp eax, dword [slpMin]
+   322 0000015D 7305                    jae minDone
+   323 0000015F 890425[00000000]        mov dword [slpMin], eax
+   324                                 
+   325                                  minDone:
+   326                                 
+   327                                 
+   328                                 
+   329                                 
+   330 00000166 3B0425[00000000]        cmp eax, dword [slpMax]
+   331 0000016D 7605                    jbe maxDone
+   332 0000016F 890425[00000000]        mov dword [slpMax], eax
+   333                                 
+   334                                  maxDone:
+   335                                 
+   336                                 
+   337                                 
+   338                                 
+   339 00000176 4883F91A                cmp rcx, 26
+   340 0000017A 7505                    jne NotMid
+   341 0000017C 010425[00000000]        add dword [slpEstMed], eax
+   342                                 
+   343                                  NotMid:
+   344                                 
+   345 00000183 4883F901                cmp rcx, 1
+   346 00000187 7505                    jne NotLast
+   347 00000189 010425[00000000]        add dword [slpEstMed], eax
+   348                                 
+   349                                  NotLast:
+   350                                 
+   351                                 
+   352                                 
+   353                                 
+   354 00000190 4883C304                add rbx, 4
+   355                                 
+   356 00000194 E2B5                   loop SlpCalcLoop
+   357                                 
+   358                                 
+   359                                 
+   360                                 
+   361                                 
+   362 00000196 8B0425[00000000]        mov eax, dword [slpSum]
+   363 0000019D 99                      cdq
+   364 0000019E 48F73C25[00000000]      idiv qword [length]
+   365 000001A6 890425[00000000]        mov dword [slpAve], eax
+   366                                 
+   367                                 
+   368                                 
+   369                                 
+   370 000001AD 8B0425[00000000]        mov eax, dword [slpEstMed]
+   371 000001B4 99                      cdq
+   372 000001B5 B903000000              mov ecx, 3
+   373 000001BA F7F9                    idiv ecx
+   374 000001BC 890425[00000000]        mov dword [slpEstMed], eax
+   375                                 
+   376                                 
+   377                                 
+   378                                 
+   379 000001C3 48C7C3[00000000]        mov rbx, distances
+   380 000001CA 48C7C100000000          mov rcx, 0
+   381 000001D1 488B0C25[00000000]      mov rcx, qword [length]
+   382                                 
+   383                                 
+   384                                 
+   385                                 
+   386 000001D9 8B0425[00000000]        mov eax, dword [distances]
+   387 000001E0 010425[00000000]        add dword [dstEstMed], eax
+   388                                 
+   389                                 
+   390                                 
+   391                                 
+   392                                 DistCalcLoop:
+   393                                 
+   394                                 
+   395                                 
+   396                                 
+   397 000001E7 8B03                    mov eax, dword [rbx]
+   398                                 
+   399                                 
+   400                                 
+   401                                 
+   402 000001E9 010425[00000000]        add dword [dstSum], eax
+   403                                 
+   404                                 
+   405                                 
+   406                                 
+   407 000001F0 3B0425[00000000]        cmp eax, dword [dstMin]
+   408 000001F7 7305                    jae dstminDone
+   409 000001F9 890425[00000000]        mov dword [dstMin], eax
+   410                                 
+   411                                  dstminDone:
+   412                                 
+   413                                 
+   414                                 
+   415                                 
+   416 00000200 3B0425[00000000]        cmp eax, dword [dstMax]
+   417 00000207 7605                    jbe dstmaxDone
+   418 00000209 890425[00000000]        mov dword [dstMax], eax
+   419                                 
+   420                                  dstmaxDone:
+   421                                 
+   422                                 
+   423                                 
+   424                                 
+   425 00000210 4883F91A                cmp rcx, 26
+   426 00000214 7505                    jne dstNotMid
+   427 00000216 010425[00000000]        add dword [dstEstMed], eax
+   428                                 
+   429                                  dstNotMid:
+   430                                 
+   431 0000021D 4883F901                cmp rcx, 1
+   432 00000221 7505                    jne dstNotLast
+   433 00000223 010425[00000000]        add dword [dstEstMed], eax
+   434                                 
+   435                                  dstNotLast:
+   436                                 
+   437                                 
+   438                                 
+   439                                 
+   440 0000022A 4883C304                add rbx, 4
+   441                                 
+   442 0000022E E2B5                   loop DistCalcLoop
+   443                                 
+   444                                 
+   445                                 
+   446                                 
+   447 00000230 8B0425[00000000]        mov eax, dword [dstSum]
+   448 00000237 99                      cdq
+   449 00000238 48F73C25[00000000]      idiv qword [length]
+   450 00000240 890425[00000000]        mov dword [dstAve], eax
+   451                                 
+   452                                 
+   453                                 
+   454                                 
+   455 00000247 8B0425[00000000]        mov eax, dword [dstEstMed]
+   456 0000024E 99                      cdq
+   457 0000024F B903000000              mov ecx, 3
+   458 00000254 F7F9                    idiv ecx
+   459 00000256 890425[00000000]        mov dword [dstEstMed], eax
+   460                                 
+   461                                 
+   462                                 
+   463                                 
+   464                                 last:
+   465 0000025D B83C000000              mov eax, SYS_exit
+   466 00000262 BB00000000              mov ebx, EXIT_SUCCESS
+   467 00000267 0F05                    syscall
+   468                                 

@@ -266,6 +266,176 @@ Midloop:
 
 loop Midloop
 
+; -----
+; Initialize data for sum, min, and max loop
+
+	mov rbx, slopes
+	mov rcx, 0
+	mov rcx, qword [length]
+
+; -----
+; Sum the first element for the est. median
+
+	mov eax, dword [slopes]
+	add dword [slpEstMed], eax
+
+; -----
+; Calculate the Sum, find the min, and find the max.
+
+SlpCalcLoop:
+			
+		; -----
+		; Move next value of slopes into eax
+		
+		mov eax, dword [rbx]
+
+		; -----
+		; Keep a running sum of all the values
+		
+		add dword [slpSum], eax
+
+		; -----
+		; If (eax >= dword [slpMin]) then jump to minDone
+		
+		cmp eax, dword [slpMin]
+		jae minDone
+			mov dword [slpMin], eax
+
+	minDone:
+
+		; -----
+		; If (eax <= dword [slpMax]) then jump to maxDone
+		
+		cmp eax, dword [slpMax]
+		jbe maxDone
+			mov dword [slpMax], eax
+
+	maxDone:
+
+		; -----
+		; Sum the last element, and the middle elements for the est. median
+
+		cmp rcx, 26
+		jne NotMid
+			add dword [slpEstMed], eax
+
+	NotMid:
+
+		cmp rcx, 1
+		jne NotLast
+			add dword [slpEstMed], eax
+
+	NotLast:
+
+		; -----
+		; Increment pointer so it points to the next element in the lst array.
+		
+		add rbx, 4
+
+loop SlpCalcLoop
+
+; -----
+; Calculate the average
+
+	
+	mov eax, dword [slpSum]
+	cdq
+	idiv 	 qword [length]
+	mov dword [slpAve], eax
+
+; -----
+; Finish calculations for the estmated median
+
+	mov eax, dword [slpEstMed]
+	cdq
+	mov ecx, 3
+	idiv 	ecx
+	mov dword [slpEstMed], eax
+
+; -----
+; Initialize data for sum, min, and max loop
+
+	mov rbx, distances
+	mov rcx, 0
+	mov rcx, qword [length]
+
+; -----
+; Sum the first element for the est. median
+
+	mov eax, dword [distances]
+	add dword [dstEstMed], eax
+
+; -----
+; Calculate the Sum, find the min, and find the max.
+
+DistCalcLoop:
+			
+		; -----
+		; Move next value of slopes into eax
+		
+		mov eax, dword [rbx]
+
+		; -----
+		; Keep a running sum of all the values
+		
+		add dword [dstSum], eax
+
+		; -----
+		; If (eax >= dword [dstMin]) then jump to minDone
+		
+		cmp eax, dword [dstMin]
+		jae dstminDone
+			mov dword [dstMin], eax
+
+	dstminDone:
+
+		; -----
+		; If (eax <= dword [dstMax]) then jump to maxDone
+		
+		cmp eax, dword [dstMax]
+		jbe dstmaxDone
+			mov dword [dstMax], eax
+
+	dstmaxDone:
+
+		; -----
+		; Sum the last element, and the middle elements for the est. median
+
+		cmp rcx, 26
+		jne dstNotMid
+			add dword [dstEstMed], eax
+
+	dstNotMid:
+
+		cmp rcx, 1
+		jne dstNotLast
+			add dword [dstEstMed], eax
+
+	dstNotLast:
+
+		; -----
+		; Increment pointer so it points to the next element in the lst array.
+		
+		add rbx, 4
+
+loop DistCalcLoop
+
+; -----
+; Calculate the average
+	
+	mov eax, dword [dstSum]
+	cdq
+	idiv 	 qword [length]
+	mov dword [dstAve], eax
+
+; -----
+; Finish calculations for the estmated median
+
+	mov eax, dword [dstEstMed]
+	cdq
+	mov ecx, 3
+	idiv 	ecx
+	mov dword [dstEstMed], eax
 
 ; *****************************************************************
 ;	Done, terminate program.
