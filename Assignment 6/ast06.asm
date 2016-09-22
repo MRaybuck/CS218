@@ -40,7 +40,62 @@
 %macro	nonary2int	2
 
 
-;	YOUR CODE GOES HERE
+; -----
+	; Algorithm:
+	
+	;	runningSum = 0
+
+		mov qword [%2], 0
+
+	;	initialize other variables
+
+		; get address of string
+		mov r14, %1
+		
+		; initialize DoNeg
+		mov byte [DoNeg], 0
+		
+		; initialize idx
+		mov r8, 0
+
+	;   startLoop
+	%%CvtLoop:
+		
+		;	get character from string
+		
+		inc r8
+
+		cmp byte [r14 + r8], NULL
+		je %%NullEncounter
+
+			;	convert character to integer (integerDigit)
+
+			mov r13b, byte [r14 + r8]
+			sub r13b, "0"
+
+			;	runningSum = runningSum * 9
+			
+			mov eax, dword [%2]
+			imul eax, 9
+			mov dword [%2], eax
+
+			;	runningSum = runningSum + integerDigit
+			
+			add dword [%2], r13d
+
+		%%NullEncounter:
+
+	;   next loop
+	cmp byte [r14 + r8], NULL
+	jne %%CvtLoop
+
+	;	if "-" then we have to negate the number in rSum
+	
+	cmp byte [r14], "-"
+	jne	%%SkipNeg
+		neg dword [%2]
+	%%SkipNeg:
+
 
 
 %endmacro
@@ -58,9 +113,88 @@
 
 %macro	int2nonary	2
 
+; For peace of mind push the values of used registers to stack
+	;push eax
+	push rcx
+	;push ebx
+	push rdx
+	push rbx
+	push rdi
+	push rax
 
-;	YOUR CODE GOES HERE
+; Convert xInt back into nonary with successive division
+	
+	mov byte [DoNeg], FALSE
 
+	; Check if the intercept is negative. If it is then negate and make DoNeg TRUE.
+	cmp dword [%1], 0
+	jge %%DontNeg
+		mov byte [DoNeg], TRUE
+		neg dword [%1]
+	%%DontNeg:
+
+	; move xInt into eax
+	mov	eax, dword [%1]
+
+	; set rcx as loop iterator that counts up until eax equals 0
+	mov rcx, 0
+
+	; ebx is the divisor that is used for successive division
+	mov ebx, 9
+
+	%%SuccessiveDivLoop:
+
+		; perform signed division for dword
+		cdq
+		idiv ebx
+
+		; push remainder onto the stack and increment rcx
+		push rdx
+		inc  rcx
+
+	; exit the loop when eax can't be divided any more.
+	cmp eax, 0
+	jne %%SuccessiveDivLoop
+
+	; get address of tmpString into rbx.
+	mov rbx, %2
+
+	; use rdi to incrementally move through tmpString to add characters to it.
+	; set to 1 so that the sign isn't overridden in the loop.
+	mov rdi, 1
+
+	; Stick a postive sign in the first position of the string.
+	mov byte [rbx], "+"
+
+	; Check if the intercept is negative and overwrite the + with a -
+	cmp byte [DoNeg], 0
+	je %%SignPositive
+		mov byte [rbx], "-"
+	%%SignPositive:
+
+	%%popStack:
+
+		; pop base 9 integer off the stack and convert to character.
+		pop rax
+		add al, "0"
+
+		; attach that character onto the string in the proper place.
+		mov byte [rbx + rdi], al
+		inc rdi
+
+	loop %%popStack
+
+	; finish the string with a NULL termination
+	mov byte [rbx + rdi], NULL
+
+; For peace of mind pop registers that were pushed to stack at beginning of macro
+	pop rax
+	pop rdi
+	pop rbx
+	pop rdx
+	;pop ebx
+	pop rcx
+	;pop eax
 
 %endmacro
 
@@ -240,13 +374,6 @@ _start:
 		; initialize idx
 		mov r8, 0
 
-	;	take care of the sign before looping just so it's already done.
-
-		cmp byte [r14], "-"
-		jne	SkipNeg
-			mov byte [DoNeg], 1
-		SkipNeg:
-
 	;   startLoop
 	CvtLoop:
 		
@@ -278,12 +405,13 @@ _start:
 	cmp byte [r14 + r8], NULL
 	jne CvtLoop
 
-	;	if DoNeg = 1 then we have to negate the number in rSum
+	;	if "-" then we have to negate the number in rSum
 	
-	cmp byte [DoNeg], 1
-	jne NoNeg
+	cmp byte [r14], "-"
+	jne	SkipNeg
 		neg dword [rSum]
-	NoNeg:
+	SkipNeg:
+
 
 	; Store rSum into Aval
 
@@ -310,34 +438,69 @@ _start:
 
 	printString	xHdr
 
+	; Convert xInt back into nonary with successive division
+	
+	mov byte [DoNeg], FALSE
+
+	; Check if the intercept is negative. If it is then negate and make DoNeg TRUE.
+	cmp dword [xInt], 0
+	jge DontNeg
+		mov byte [DoNeg], TRUE
+		neg dword [xInt]
+	DontNeg:
+
+	; move xInt into eax
 	mov	eax, dword [xInt]
+
+	; set rcx as loop iterator that counts up until eax equals 0
 	mov rcx, 0
-	mov ebx, 10
+
+	; ebx is the divisor that is used for successive division
+	mov ebx, 9
 
 	SuccessiveDivLoop:
 
+		; perform signed division for dword
 		cdq
 		idiv ebx
 
+		; push remainder onto the stack and increment rcx
 		push rdx
 		inc  rcx
 
+	; exit the loop when eax can't be divided any more.
 	cmp eax, 0
 	jne SuccessiveDivLoop
 
+	; get address of tmpString into rbx.
 	mov rbx, tmpString
-	mov rdi, 0
+
+	; use rdi to incrementally move through tmpString to add characters to it.
+	; set to 1 so that the sign isn't overridden in the loop.
+	mov rdi, 1
+
+	; Stick a postive sign in the first position of the string.
+	mov byte [rbx], "+"
+
+	; If (DoNeg == FALSE) then jump
+	cmp byte [DoNeg], FALSE
+	je SignPositive
+		mov byte [rbx], "-"
+	SignPositive:
 
 	popStack:
 
+		; pop base 9 integer off the stack and convert to character.
 		pop rax
 		add al, "0"
 
+		; attach that character onto the string in the proper place.
 		mov byte [rbx + rdi], al
 		inc rdi
 
 	loop popStack
 
+	; finish the string with a NULL termination
 	mov byte [rbx + rdi], NULL
 
 	printString	tmpString
