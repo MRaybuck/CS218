@@ -165,9 +165,9 @@ _start:
 ; -----
 ; Calculate the average
 
-	mov edx, 0
-	mov eax, dword [lstSum]
-	div 	 dword [length]
+	mov eax, dword [sum]
+	cdq
+	idiv 	 dword [length]
 	mov dword [lstAve], eax
 
 ; -----
