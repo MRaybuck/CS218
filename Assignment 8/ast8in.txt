@@ -1,0 +1,36 @@
+echo \n\n
+break 200
+run
+set pagination off
+set logging file a8out.txt
+set logging overwrite
+set logging on
+set prompt
+echo \n
+echo ------------------------------ \n
+echo display list1 sorted stats \n
+echo ------------------------------ \n
+echo list1: \t
+x/37dd &list1
+echo \n
+echo len1: \t
+x/dd &len1
+echo \n\n
+echo min1: \t
+x/dd &min1
+echo med1: \t
+x/dd &med1
+echo max1: \t
+x/dd &max1
+echo sum1: \t
+x/dd &sum1
+echo ave1: \t
+x/dd &ave1
+echo \n \n
+
+echo kStat1: \t
+x/dd &kStat1
+echo \n \n
+
+set logging off
+quit
