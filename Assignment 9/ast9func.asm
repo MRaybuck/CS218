@@ -1,8 +1,14 @@
-;  CS 218 - Assignment 8
+;	Matt Raybuck
+;	Section 1002
+;  CS 218 - Assignment 9
 ;  Functions Template.
 
 ; --------------------------------------------------------------------
-;  Write some assembly language functions.
+;  Write assembly language functions.
+
+;  The value returning function, rdNonaryNum(), should read
+;  a nonary number from the user (STDIN) and perform
+;  apprpriate error checking and conversion (string to integer).
 
 ;  The value returning function lstEstMedian() returns the
 ;  median for a list of unsorted numbers.
@@ -28,64 +34,302 @@
 ;  kurtosis statictic for the data set.  Summation for the
 ;  dividend must be performed as a quad.
 
+
 ; ********************************************************************************
 
 section	.data
 
 ; -----
-;  Define constants.
+;  Define standard constants.
 
 TRUE		equ	1
 FALSE		equ	0
 
+EXIT_SUCCESS	equ	0			; Successful operation
+
+STDIN		equ	0			; standard input
+STDOUT		equ	1			; standard output
+STDERR		equ	2			; standard error
+
+SYS_read	equ	0			; system call code for read
+SYS_write	equ	1			; system call code for write
+SYS_open	equ	2			; system call code for file open
+SYS_close	equ	3			; system call code for file close
+SYS_fork	equ	57			; system call code for fork
+SYS_exit	equ	60			; system call code for terminate
+SYS_creat	equ	85			; system call code for file open/create
+SYS_time	equ	201			; system call code for get time
+
+LF		equ	10
+SPACE		equ	" "
+NULL		equ	0
+ESC		equ	27
+
 ; -----
-;  Local variables for combSort() function.
-;swapped		db  TRUE
-;OtrLpCon	db 	FALSE
-;mul10		dd 	10
-;div12 		dd  12
+;  Define program specific constants.
 
-
-; -----
-;  Local variables for lstStats() function (if any).
-
-
-
-section	.bss
+MAXNUM		equ	100000
+MINNUM		equ	-100000
+BUFFSIZE	equ	51			; 50 chars plus NULL
 
 ; -----
-;  Unitialized variables (if any).
-
+;  NO static local variables allowed...
 
 
 ; ********************************************************************************
 
 section	.text
 
-; **********************************************************************************
-;  Comb Sort Algorithm:
+; --------------------------------------------------------
+;  Read an ASCII nonary number from the user.
+;  Perform appropriate error checking and, if OK,
+;  convert to integer.
 
-;  void function combSort(array, length)
-;     gap = length
-;
-;     outter loop until gap = 1 and swapped = false
-;         gap = (gap * 10) / 12	     			// update gap for next sweep
-;         if gap < 1
-;           gap = 1
-;         end if
-;
-;         i = 0
-;         swapped = false
-;
-;         inner loop until i + gap >= length	       // single comb sweep
-;             if  array[i] > array[i+gap]
-;                 swap(array[i], array[i+gap])
-;                 swapped = true
-;             end if
-;             i = i + 1
-;         end inner loop
-;      end outter loop
-;  end function
+; -----
+;  HLL Call:
+;	bool = rdNonaryNum(&numberRead, promptStr, errMsg1,
+;				errMsg2, errMsg3);
+
+;  Arguments Passed:
+;	numberRead, addr - rdi
+;	promptStr, addr - rsi
+;	errMsg1, addr - rdx
+;	errMsg2, addr - rcx
+;	errMsg3, addr - r8
+
+;  Returns:
+;	true/false
+;	number read (via reference)
+
+global	rdNonaryNum
+rdNonaryNum:
+
+;-----
+; Set up Stack Dynamic Locals
+	push rbp
+	mov rbp, rsp
+	sub rsp, 58
+
+;-----
+; push maintained registers (rbx, r12, r13, r14, r15)
+	push rbx
+	push r12
+	push r13
+	push r14
+	push r15
+
+;-----
+; Preserve function arguements in maintained registers
+	mov rbx, rdi 	;	numberRead, addr - rdi
+	mov r12, rsi 	;	promptStr, addr - rsi
+	mov r13, rdx 	;	errMsg1, addr - rdx
+	mov r14, rcx	;	errMsg2, addr - rcx
+	mov r15, r8 	;	errMsg3, addr - r8
+
+;-----
+; initialize SDLs
+
+initializeSDLs:
+
+	mov dword [rbp - 56], 0		; dword rsum = 0
+	mov byte [rbp - 57], FALSE	; byte DoNeg = FALSE
+	mov byte [rbp - 58], 0		; ChrCnt = 0
+	lea rcx, byte [rbp - 51]	; stick addr of line into rcx
+
+
+;-----
+; Read character from user
+
+NxtChrLp:
+
+	; inc ChrCnt
+	inc byte [rbp - 58]
+
+	; Sys call stuff
+	mov rax, SYS_read
+	mov rdi, STDIN
+	lea rsi, byte [rbp - 52] ; rsi = address of chr
+	mov rdx, 1
+	syscall
+
+	; check for LF in chr. If yes jmp to inputDone
+	mov al, byte [rbp - 52]
+	cmp al, LF
+	je inputDone
+
+	; Continue reading characters from user but check if line length has been reach. Yes? Don't store anything beyond 50 characters
+	mov al, byte [rbp - 58]
+	cmp al, 50
+	ja SkipStorage
+
+	; chr storage code
+	mov byte [rcx], al
+	inc rcx
+
+	; jump location to skip storage if input exceeds max
+	SkipStorage:
+
+jmp NxtChrLp
+
+;-----
+; End of user input
+
+inputDone:
+
+;-----
+; Was the input too long?
+
+; if (ChrCnt > 50) then ERROR
+mov al, byte [rbp - 58]
+cmp al, 51
+jb ValidInputSize
+
+	; print error
+	mov rdi, r15 ; set argument for passing (error3)
+	call printString
+	
+	; reprompt for input
+	mov rdi, r12 ; set argument for passing (promptStr)
+	call printString
+
+	; jump to top of function
+	jmp initializeSDLs
+
+ValidInputSize:
+
+; if (ChrCnt == 1) then return false
+mov al, byte [rbp - 58]
+cmp al, 1
+jne ContinueFunc
+	mov rax, FALSE ; return FALSE
+	ret
+
+ContinueFunc:
+
+
+;-----
+; Finish off string with a NULL character
+
+; append NULL to end of line
+mov byte [rcx], NULL
+
+;-----
+; Setup for erroring checking loop
+
+; string iterator = 0
+
+; reset position of rcx addr
+lea rcx, byte [rbp - 51]
+
+
+;-----
+; Error Checking Loop
+; loop condition: do while line[i] != NULL
+
+ErrChkLp
+
+	; if space chr then jmp to ErrChkLpSetup
+	mov al, byte [rcx]
+	cmp al, ' '
+	je ErrChkLpSetup
+
+		; is first character sign?
+		cmp al, '+'
+		je PlusFound
+
+			cmp al, '-'
+			je MinusFound
+				; first chr is not a sign? Error! (jmp ErrInvIn)
+				
+				; print error
+				mov rdi, r13 ; set argument for passing (error1)
+				call printString
+				
+				; reprompt for input
+				mov rdi, r12 ; set argument for passing (promptStr)
+				call printString
+
+				; jump to top of function
+				jmp initializeSDLs
+
+				; trying to hide this error in a part of the function that is inaccessible otherwise
+				ErrOutOfRange:
+
+					; print error
+					mov rdi, r14 ; set argument for passing (error2)
+					call printString
+					
+					; reprompt for input
+					mov rdi, r12 ; set argument for passing (promptStr)
+					call printString
+
+					; jump to top of function
+					jmp initializeSDLs
+				
+			; if (sign == '-') DoNeg = TRUE
+			MinusFound:
+				mov byte [rbp - 57], TRUE
+
+		PlusFound:
+
+		; chr within range? '0' - '8'
+		cmp al, '0'
+		jb ErrOutOfRange
+		cmp al, '8'
+		ja ErrOutOfRange
+		
+		;-----	
+		; convert nonary to int and place in rsum
+		
+		; chr to int
+		sub al, '0'
+
+		; rsum = rsum * 9
+		mov ax, dword [rbp - 56]
+		mul ax, 9
+		mov dword [rbp - 56], ax
+
+		;rsum = rsum + int
+		add dword [rbp - 56], al
+
+
+	ErrChkLpSetup:
+
+	; inc string position
+	inc rcx
+
+	; check if line[i] == NULL
+	cmp byte [rcx], NULL
+	je ExitErrChk
+
+;line[i] != NULL jmp ErrChkLp
+jmp ErrChkLp
+
+;-----
+; End of Error Check loop
+ExitErrChk:
+
+;-----
+; Place rsum in dword [rdi] (now in rbx)
+mov ax, dword [rbp - 56]
+mov dword [rbx], ax
+
+;-----
+; pop used registers to maintain std call conv
+	pop r15
+	pop r14
+	pop r13
+	pop r12
+	pop rbx
+
+; ret TRUE (place TRUE in rax)
+mov rax, TRUE
+
+ret
+
+
+; **********************************************************************************
+;  Perform comb sort
 
 ; -----
 ;  HLL Call:
@@ -97,6 +341,7 @@ section	.text
 
 ;  Returns:
 ;	sorted list (list passed by reference)
+
 
 global	combSort
 combSort:
@@ -196,9 +441,9 @@ OuterLoop:
 		mov r10d, dword [rdi + r8 * 4] ; array[i+gap]
 
 		; -----
-		; if  array[i] < array[i+gap]
+		; if  array[i] > array[i+gap]
 		cmp r9d, r10d
-		jg SwapDone
+		jle SwapDone
 
 			; -----
 			; swap(array[i], array[i+gap])
@@ -243,7 +488,6 @@ pop rbp
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Find statistical information for a list of integers:
 ;	sum, average, minimum, maximum, and, median
@@ -252,8 +496,8 @@ ret
 ;  the middle value.  For an even number of values, it is the integer
 ;  average of the two middle values.
 
-;  This function must call the lstSum(), lstMedian(), and
-;  lstAvergae() functions.
+;  This function must call the lstAvergae() function
+;  to get the average.
 
 ;  Note, assumes the list is already sorted.
 
@@ -262,17 +506,18 @@ ret
 ;	call lstStats(list, len, sum, ave, min, max, med)
 
 ;  Arguments Passed:
-;	1) list, addr - rdi
-;	2) length, value - rsi
-;	3) sum, addr - rdx
-;	4) average, addr - rcx
-;	5) minimum, addr - r8
-;	6) maximum, addr - r9
-;	7) median, addr - stack, rbp+16
+;	list, addr - rdi
+;	length, value - rsi
+;	sum, addr - rdx
+;	average, addr - rcx
+;	minimum, addr - r8
+;	maximum, addr - r9
+;	median, addr - stack, rbp+16
 
 ;  Returns:
 ;	sum, average, minimum, maximum, and median
 ;		via pass-by-reference
+
 
 global lstStats
 lstStats:
@@ -362,7 +607,6 @@ lstStats:
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Function to calculate the median of a sorted list.
 
@@ -376,6 +620,7 @@ ret
 
 ;  Returns:
 ;	median (in eax)
+
 
 global	lstMedian
 lstMedian:
@@ -419,7 +664,6 @@ lstMedian:
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Function to calculate the median of a sorted list.
 
@@ -432,7 +676,8 @@ ret
 ;	1) length, value - rsi
 
 ;  Returns:
-;	sum (in eax)
+;	estimated median (in eax)
+
 
 global	lstEstMedian
 lstEstMedian:
@@ -513,7 +758,6 @@ lstEstMedian:
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Function to calculate the sum of a list.
 
@@ -527,6 +771,7 @@ ret
 
 ;  Returns:
 ;	sum (in eax)
+
 
 global	lstSum
 lstSum:
@@ -560,7 +805,6 @@ loop CalcLoop
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Function to calculate the average of a list.
 
@@ -574,6 +818,7 @@ ret
 
 ;  Returns:
 ;	average (in eax)
+
 
 global	lstAverage
 lstAverage:
@@ -611,7 +856,6 @@ idiv rsi
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Function to calculate the kurtosis statisic.
 
@@ -626,6 +870,7 @@ ret
 
 ;  Returns:
 ;	kurtosis statistic (in rax)
+
 
 global lstKurtosis
 lstKurtosis:
@@ -693,6 +938,53 @@ lstKurtosis:
 ret
 
 
-
 ; ********************************************************************************
+;  Generic procedure to display a string to the screen.
+;  String must be NULL terminated.
+
+;  Algorithm:
+;	Count characters in string (excluding NULL)
+;	Use syscall to output characters
+
+; -----
+;  HLL Call:
+;	printString(stringAddr);
+
+;  Arguments:
+;	1) address, string
+;  Returns:
+;	nothing
+
+global	printString
+printString:
+
+; -----
+;  Count characters to write.
+
+	mov	rdx, 0
+strCountLoop:
+	cmp	byte [rdi+rdx], NULL
+	je	strCountLoopDone
+	inc	rdx
+	jmp	strCountLoop
+strCountLoopDone:
+	cmp	rdx, 0
+	je	printStringDone
+
+; -----
+;  Call OS to output string.
+
+	mov	rax, SYS_write			; system code for write()
+	mov	rsi, rdi			; address of char to write
+	mov	rdi, STDOUT			; file descriptor for std in
+						; rdx=count to write, set above
+	syscall					; system call
+
+; -----
+;  String printed, return to calling routine.
+
+printStringDone:
+	ret
+
+; ******************************************************************
 
