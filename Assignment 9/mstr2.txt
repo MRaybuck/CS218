@@ -1,0 +1,65 @@
+--------------------------------------------------
+CS 218 - Assignment #9
+
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): 
+--------------------------------------------------
+Program Results
+
+Sorted List: 
+-2134  -2118  -1774  -1729  -1650  -1569  -1567  -1559  -1549  -1468  
+-1360  -957  -921  -822  -822  -749  -749  -660  -658  -579  
+2  29  30  109  110  322  659  660  717  728  
+741  903  903  903  908  919  1324  1389  1405  1407  
+1446  1450  1540  1549  1551  1551  1567  1632  1632  1632  
+1702  2053  2055  2099  2125  2136  
+
+      Sum =         16494
+  Average =           294
+  Minimum =         -2134
+  Maximum =          2136
+   Median =           688
+ Kurtosis =       2963775
+

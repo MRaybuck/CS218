@@ -101,8 +101,8 @@ section	.text
 ;	true/false
 ;	number read (via reference)
 
-global	rdNonaryNum
-rdNonaryNum:
+global	readNonaryNum
+readNonaryNum:
 
 ;-----
 ; Set up Stack Dynamic Locals
@@ -127,6 +127,13 @@ rdNonaryNum:
 	mov r15, r8 	;	errMsg3, addr - r8
 
 ;-----
+; Prompt user for input
+	mov rdi, rsi
+	call printString
+
+push rbx
+
+;-----
 ; initialize SDLs
 
 initializeSDLs:
@@ -134,7 +141,7 @@ initializeSDLs:
 	mov dword [rbp - 56], 0		; dword rsum = 0
 	mov byte [rbp - 57], FALSE	; byte DoNeg = FALSE
 	mov byte [rbp - 58], 0		; ChrCnt = 0
-	lea rcx, byte [rbp - 51]	; stick addr of line into rcx
+	lea rbx, byte [rbp - 51]	; stick addr of line into rcx
 
 
 ;-----
@@ -158,13 +165,13 @@ NxtChrLp:
 	je inputDone
 
 	; Continue reading characters from user but check if line length has been reach. Yes? Don't store anything beyond 50 characters
-	mov al, byte [rbp - 58]
-	cmp al, 50
+	mov cl, byte [rbp - 58]
+	cmp cl, 50
 	ja SkipStorage
 
 	; chr storage code
-	mov byte [rcx], al
-	inc rcx
+	mov byte [rbx], al
+	inc rbx
 
 	; jump location to skip storage if input exceeds max
 	SkipStorage:
@@ -182,7 +189,7 @@ inputDone:
 ; if (ChrCnt > 50) then ERROR
 mov al, byte [rbp - 58]
 cmp al, 51
-jb ValidInputSize
+jbe ValidInputSize
 
 	; print error
 	mov rdi, r15 ; set argument for passing (error3)
@@ -201,6 +208,21 @@ ValidInputSize:
 mov al, byte [rbp - 58]
 cmp al, 1
 jne ContinueFunc
+
+	;-----
+	; pop used registers to maintain std call conv
+	pop r15
+	pop r14
+	pop r13
+	pop r12
+	pop rbx
+
+	; ret TRUE (place TRUE in rax)
+	mov rax, TRUE
+
+	mov rsp, rbp
+	pop rbp
+
 	mov rax, FALSE ; return FALSE
 	ret
 
@@ -211,7 +233,9 @@ ContinueFunc:
 ; Finish off string with a NULL character
 
 ; append NULL to end of line
-mov byte [rcx], NULL
+mov byte [rbx], NULL
+
+pop rbx
 
 ;-----
 ; Setup for erroring checking loop
@@ -271,26 +295,41 @@ ErrChkLp
 				mov byte [rbp - 57], TRUE
 
 		PlusFound:
+			inc rcx
+			mov al, byte[rcx]
+		WithinRangeChk:
+			mov al, byte [rcx]
 
-		; chr within range? '0' - '8'
-		cmp al, '0'
-		jb ErrOutOfRange
-		cmp al, '8'
-		ja ErrOutOfRange
-		
-		;-----	
-		; convert nonary to int and place in rsum
-		
-		; chr to int
-		sub al, '0'
+			; chr within range? '0' - '8'
+			cmp al, '0'
+			jb ErrOutOfRange
+			cmp al, '8'
+			ja ErrOutOfRange
+			
+			;-----	
+			; convert nonary to int and place in rsum
+			
+			; chr to int
+			sub al, '0'
+			mov r8, 0
+			mov r8b, al
 
-		; rsum = rsum * 9
-		mov ax, dword [rbp - 56]
-		mul ax, 9
-		mov dword [rbp - 56], ax
+			; rsum = rsum * 9
+			mov eax, dword [rbp - 56]
+			imul eax, 9
+			mov dword [rbp - 56], eax
 
-		;rsum = rsum + int
-		add dword [rbp - 56], al
+			;rsum = rsum + int
+			add dword [rbp - 56], r8d
+
+			; inc string position
+			inc rcx
+
+			; check if line[i] == NULL
+			cmp byte [rcx], NULL
+			je ExitErrChk
+
+		jmp WithinRangeChk
 
 
 	ErrChkLpSetup:
@@ -309,10 +348,16 @@ jmp ErrChkLp
 ; End of Error Check loop
 ExitErrChk:
 
+mov al, byte [rbp - 57]
+cmp al, TRUE
+jne SkipNeg
+	neg dword [rbp - 56]
+SkipNeg:
+
 ;-----
 ; Place rsum in dword [rdi] (now in rbx)
-mov ax, dword [rbp - 56]
-mov dword [rbx], ax
+mov eax, dword [rbp - 56]
+mov dword [rbx], eax
 
 ;-----
 ; pop used registers to maintain std call conv
@@ -324,6 +369,9 @@ mov dword [rbx], ax
 
 ; ret TRUE (place TRUE in rax)
 mov rax, TRUE
+
+mov rsp, rbp
+pop rbp
 
 ret
 
@@ -538,17 +586,17 @@ lstStats:
 	push r14
 
 	; -----
-	; Find Max
+	; Find Min
 	mov eax, dword [rdi]
-	mov dword [r9], eax
+	mov dword [r8], eax
 
 	; -----
-	; Find min
+	; Find Max
 	mov r10, 0
 	mov r10, rsi
 	dec r10
 	mov eax, dword [rdi + r10 * 4]
-	mov dword [r8], eax
+	mov dword [r9], eax
 
 	; ----------
 	; lstSum Function Call

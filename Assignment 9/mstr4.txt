@@ -1,0 +1,33 @@
+--------------------------------------------------
+CS 218 - Assignment #9
+
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, invalid. Please re-enter
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): 
+--------------------------------------------------
+Program Results
+
+Sorted List: 
+-1386  -1386  -992  82  82  100  172  181  253  747  
+747  748  748  793  793  810  811  811  811  812  
+812  820  829  829  838  838  892  893  893  901  
+903  903  910  910  910  919  972  982  991  991  
+992  1036  1216  1216  1234  1298  1315  1315  1378  1378  
+1476  1539  1539  1539  1540  1540  1540  1540  1541  1541  
+1541  1548  1548  1549  1549  1549  1549  1549  1549  1558  
+1558  1558  1558  1558  1558  1566  1567  1567  1567  1620  
+1620  1621  1621  1621  1621  1621  1621  1621  1630  1630  
+1630  1630  1630  1630  1630  1640  1711  1711  2090  2124  
+2188  2269  2269  2269  2289  2350  2350  2350  2351  2351  
+2359  2368  2368  2368  2368  2368  2368  2460  2998  3024  
+3063  
+
+      Sum =        167353
+  Average =          1383
+  Minimum =         -1386
+  Maximum =          3063
+   Median =          1541
+ Kurtosis =       3052535
+

@@ -1,0 +1,22 @@
+--------------------------------------------------
+CS 218 - Assignment #9
+
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, input too long. Please re-enter.
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Error, input too long. Please re-enter.
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): 
+--------------------------------------------------
+Program Results
+
+Sorted List: 
+-993  -992  -909  -830  -830  -813  -669  -666  -579  -174  
+237  561  586  588  595  649  651  659  668  668  
+738  813  821  830  902  912  919  921  957  5204  
+5834  
+
+      Sum =         17258
+  Average =           556
+  Minimum =          -993
+  Maximum =          5834
+   Median =           649
+ Kurtosis =      18766448
+

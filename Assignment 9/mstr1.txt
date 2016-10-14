@@ -1,0 +1,25 @@
+--------------------------------------------------
+CS 218 - Assignment #9
+
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): 
+--------------------------------------------------
+Program Results
+
+Sorted List: 
+-2437  -2250  -2221  -2207  -2197  -1461  -815  -762  -753  -738  
+-116  -34  -18  1  2  3  9  10  12  18  
+19  19  19  20  20  21  26  27  28  32  
+81  82  83  83  84  91  97  98  100  109  
+110  111  163  164  164  165  169  172  173  174  
+179  730  731  732  737  739  741  748  748  749  
+750  756  758  759  810  811  812  1458  1459  1465  
+2188  2189  2190  2195  2196  2199  2205  2206  2206  2208  
+2215  2222  2431  2432  2440  2447  3159  
+
+      Sum =         42750
+  Average =           491
+  Minimum =         -2437
+  Maximum =          3159
+   Median =           164
+ Kurtosis =       4521091
+

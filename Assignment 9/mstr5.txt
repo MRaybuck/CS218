@@ -1,0 +1,18 @@
+--------------------------------------------------
+CS 218 - Assignment #9
+
+Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): Enter Value (nonary): 
+--------------------------------------------------
+Program Results
+
+Sorted List: 
+-5832  -5103  -4374  -3645  -2916  -2916  -2187  -2187  -2187  -1458  
+-1458  -729  -729  
+
+      Sum =        -35721
+  Average =         -2747
+  Minimum =         -5832
+  Maximum =          -729
+   Median =         -2187
+ Kurtosis =       5422624
+

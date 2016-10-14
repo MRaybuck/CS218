@@ -1,0 +1,1039 @@
+     1                                 %line 1+1 ast9func.asm
+     2                                 
+     3                                 
+     4                                 
+     5                                 
+     6                                 
+     7                                 
+     8                                 
+     9                                 
+    10                                 
+    11                                 
+    12                                 
+    13                                 
+    14                                 
+    15                                 
+    16                                 
+    17                                 
+    18                                 
+    19                                 
+    20                                 
+    21                                 
+    22                                 
+    23                                 
+    24                                 
+    25                                 
+    26                                 
+    27                                 
+    28                                 
+    29                                 
+    30                                 
+    31                                 
+    32                                 
+    33                                 
+    34                                 
+    35                                 
+    36                                 
+    37                                 
+    38                                 
+    39                                 
+    40                                 
+    41                                 [section .data]
+    42                                 
+    43                                 
+    44                                 
+    45                                 
+    46                                 TRUE equ 1
+    47                                 FALSE equ 0
+    48                                 
+    49                                 EXIT_SUCCESS equ 0
+    50                                 
+    51                                 STDIN equ 0
+    52                                 STDOUT equ 1
+    53                                 STDERR equ 2
+    54                                 
+    55                                 SYS_read equ 0
+    56                                 SYS_write equ 1
+    57                                 SYS_open equ 2
+    58                                 SYS_close equ 3
+    59                                 SYS_fork equ 57
+    60                                 SYS_exit equ 60
+    61                                 SYS_creat equ 85
+    62                                 SYS_time equ 201
+    63                                 
+    64                                 LF equ 10
+    65                                 SPACE equ " "
+    66                                 NULL equ 0
+    67                                 ESC equ 27
+    68                                 
+    69                                 
+    70                                 
+    71                                 
+    72                                 MAXNUM equ 100000
+    73                                 MINNUM equ -100000
+    74                                 BUFFSIZE equ 51
+    75                                 
+    76                                 
+    77                                 
+    78                                 
+    79                                 
+    80                                 
+    81                                 
+    82                                 [section .text]
+    83                                 
+    84                                 
+    85                                 
+    86                                 
+    87                                 
+    88                                 
+    89                                 
+    90                                 
+    91                                 
+    92                                 
+    93                                 
+    94                                 
+    95                                 
+    96                                 
+    97                                 
+    98                                 
+    99                                 
+   100                                 
+   101                                 
+   102                                 
+   103                                 
+   104                                 
+   105                                 [global readNonaryNum]
+   106                                 readNonaryNum:
+   107                                 
+   108                                 
+   109                                 
+   110 00000000 55                      push rbp
+   111 00000001 4889E5                  mov rbp, rsp
+   112 00000004 4883EC3A                sub rsp, 58
+   113                                 
+   114                                 
+   115                                 
+   116 00000008 53                      push rbx
+   117 00000009 4154                    push r12
+   118 0000000B 4155                    push r13
+   119 0000000D 4156                    push r14
+   120 0000000F 4157                    push r15
+   121                                 
+   122                                 
+   123                                 
+   124 00000011 4889FB                  mov rbx, rdi
+   125 00000014 4989F4                  mov r12, rsi
+   126 00000017 4989D5                  mov r13, rdx
+   127 0000001A 4989CE                  mov r14, rcx
+   128 0000001D 4D89C7                  mov r15, r8
+   129                                 
+   130                                 
+   131                                 
+   132 00000020 4889F7                  mov rdi, rsi
+   133 00000023 E864030000              call printString
+   134                                 
+   135 00000028 53                     push rbx
+   136                                 
+   137                                 
+   138                                 
+   139                                 
+   140                                 initializeSDLs:
+   141                                 
+   142 00000029 C745C800000000          mov dword [rbp - 56], 0
+   143 00000030 C645C700                mov byte [rbp - 57], FALSE
+   144 00000034 C645C600                mov byte [rbp - 58], 0
+   145 00000038 488D5DCD                lea rbx, byte [rbp - 51]
+   146                                 
+   147                                 
+   148                                 
+   149                                 
+   150                                 
+   151                                 NxtChrLp:
+   152                                 
+   153                                 
+   154 0000003C FE45C6                  inc byte [rbp - 58]
+   155                                 
+   156                                 
+   157 0000003F 48C7C000000000          mov rax, SYS_read
+   158 00000046 48C7C700000000          mov rdi, STDIN
+   159 0000004D 488D75CC                lea rsi, byte [rbp - 52]
+   160 00000051 48C7C201000000          mov rdx, 1
+   161 00000058 0F05                    syscall
+   162                                 
+   163                                 
+   164 0000005A 8A45CC                  mov al, byte [rbp - 52]
+   165 0000005D 3C0A                    cmp al, LF
+   166 0000005F 740D                    je inputDone
+   167                                 
+   168                                 
+   169 00000061 8A4DC6                  mov cl, byte [rbp - 58]
+   170 00000064 80F932                  cmp cl, 50
+   171 00000067 7703                    ja SkipStorage
+   172                                 
+   173                                 
+   174 00000069 8803                    mov byte [rbx], al
+   175 0000006B 48FFC3                  inc rbx
+   176                                 
+   177                                 
+   178                                  SkipStorage:
+   179                                 
+   180 0000006E EBCA                   jmp NxtChrLp
+   181                                 
+   182                                 
+   183                                 
+   184                                 
+   185                                 inputDone:
+   186                                 
+   187                                 
+   188                                 
+   189                                 
+   190                                 
+   191 00000070 8A45C6                 mov al, byte [rbp - 58]
+   192 00000073 3C33                   cmp al, 51
+   193 00000075 7610                   jbe ValidInputSize
+   194                                 
+   195                                 
+   196 00000077 4C89FF                  mov rdi, r15
+   197 0000007A E80D030000              call printString
+   198                                 
+   199                                 
+   200 0000007F 4C89E7                  mov rdi, r12
+   201 00000082 E805030000              call printString
+   202                                 
+   203                                 
+   204 00000087 EB9E                    jmp initializeSDLs
+   205                                 
+   206                                 ValidInputSize:
+   207                                 
+   208                                 
+   209 00000089 8A45C6                 mov al, byte [rbp - 58]
+   210 0000008C 3C01                   cmp al, 1
+   211 0000008E 751A                   jne ContinueFunc
+   212                                 
+   213                                 
+   214                                 
+   215 00000090 415F                    pop r15
+   216 00000092 415E                    pop r14
+   217 00000094 415D                    pop r13
+   218 00000096 415C                    pop r12
+   219 00000098 5B                      pop rbx
+   220                                 
+   221                                 
+   222 00000099 48C7C001000000          mov rax, TRUE
+   223                                 
+   224 000000A0 4889EC                  mov rsp, rbp
+   225 000000A3 5D                      pop rbp
+   226                                 
+   227 000000A4 48C7C000000000          mov rax, FALSE
+   228 000000AB C3                      ret
+   229                                 
+   230                                 ContinueFunc:
+   231                                 
+   232                                 
+   233                                 
+   234                                 
+   235                                 
+   236                                 
+   237 000000AC C60300                 mov byte [rbx], NULL
+   238                                 
+   239 000000AF 5B                     pop rbx
+   240                                 
+   241                                 
+   242                                 
+   243                                 
+   244                                 
+   245                                 
+   246                                 
+   247 000000B0 488D4DCD               lea rcx, byte [rbp - 51]
+   248                                 
+   249                                 
+   250                                 
+   251                                 
+   252                                 
+   253                                 
+   254                                 ErrChkLp
+   255                                 
+   256                                 
+   257 000000B4 8A01                    mov al, byte [rcx]
+   258 000000B6 3C20                    cmp al, ' '
+   259 000000B8 7466                    je ErrChkLpSetup
+   260                                 
+   261                                 
+   262 000000BA 3C2B                    cmp al, '+'
+   263 000000BC 7430                    je PlusFound
+   264                                 
+   265 000000BE 3C2D                    cmp al, '-'
+   266 000000C0 7428                    je MinusFound
+   267                                 
+   268                                 
+   269                                 
+   270 000000C2 4C89EF                  mov rdi, r13
+   271 000000C5 E8C2020000              call printString
+   272                                 
+   273                                 
+   274 000000CA 4C89E7                  mov rdi, r12
+   275 000000CD E8BA020000              call printString
+   276                                 
+   277                                 
+   278 000000D2 E94DFFFFFF              jmp initializeSDLs
+   279                                 
+   280                                 
+   281                                  ErrOutOfRange:
+   282                                 
+   283                                 
+   284 000000D7 4C89F7                  mov rdi, r14
+   285 000000DA E8AD020000              call printString
+   286                                 
+   287                                 
+   288 000000DF 4C89E7                  mov rdi, r12
+   289 000000E2 E8A5020000              call printString
+   290                                 
+   291                                 
+   292 000000E7 E938FFFFFF              jmp initializeSDLs
+   293                                 
+   294                                 
+   295                                  MinusFound:
+   296 000000EC C645C701                mov byte [rbp - 57], TRUE
+   297                                 
+   298                                  PlusFound:
+   299 000000F0 48FFC1                  inc rcx
+   300 000000F3 8A01                    mov al, byte[rcx]
+   301                                  WithinRangeChk:
+   302 000000F5 8A01                    mov al, byte [rcx]
+   303                                 
+   304                                 
+   305 000000F7 3C30                    cmp al, '0'
+   306 000000F9 72DA                    jb ErrOutOfRange
+   307 000000FB 3C38                    cmp al, '8'
+   308 000000FD 77D6                    ja ErrOutOfRange
+   309                                 
+   310                                 
+   311                                 
+   312                                 
+   313                                 
+   314 000000FF 2C30                    sub al, '0'
+   315 00000101 49C7C000000000          mov r8, 0
+   316 00000108 4188C0                  mov r8b, al
+   317                                 
+   318                                 
+   319 0000010B 8B45C8                  mov eax, dword [rbp - 56]
+   320 0000010E 6BC009                  imul eax, 9
+   321 00000111 8945C8                  mov dword [rbp - 56], eax
+   322                                 
+   323                                 
+   324 00000114 440145C8                add dword [rbp - 56], r8d
+   325                                 
+   326                                 
+   327 00000118 48FFC1                  inc rcx
+   328                                 
+   329                                 
+   330 0000011B 803900                  cmp byte [rcx], NULL
+   331 0000011E 740A                    je ExitErrChk
+   332                                 
+   333 00000120 EBD1                    jmp WithinRangeChk
+   334                                 
+   335                                 
+   336                                  ErrChkLpSetup:
+   337                                 
+   338                                 
+   339 00000122 48FFC1                  inc rcx
+   340                                 
+   341                                 
+   342 00000125 803900                  cmp byte [rcx], NULL
+   343 00000128 7400                    je ExitErrChk
+   344                                 
+   345                                 
+   346 0000012A EB86                   jmp ErrChkLp
+   347                                 
+   348                                 
+   349                                 
+   350                                 ExitErrChk:
+   351                                 
+   352 0000012C 8A45C7                 mov al, byte [rbp - 57]
+   353 0000012F 3C01                   cmp al, TRUE
+   354 00000131 7501                   jne SkipNeg
+   355 00000133 F75DC8                  neg dword [rbp - 56]
+   356                                 SkipNeg:
+   357                                 
+   358                                 
+   359                                 
+   360 00000136 8B45C8                 mov eax, dword [rbp - 56]
+   361 00000139 8903                   mov dword [rbx], eax
+   362                                 
+   363                                 
+   364                                 
+   365 0000013B 415F                    pop r15
+   366 0000013D 415E                    pop r14
+   367 0000013F 415D                    pop r13
+   368 00000141 415C                    pop r12
+   369 00000143 5B                      pop rbx
+   370                                 
+   371                                 
+   372 00000144 48C7C001000000         mov rax, TRUE
+   373                                 
+   374 0000014B 4889EC                 mov rsp, rbp
+   375 0000014E 5D                     pop rbp
+   376                                 
+   377 0000014F C3                     ret
+   378                                 
+   379                                 
+   380                                 
+   381                                 
+   382                                 
+   383                                 
+   384                                 
+   385                                 
+   386                                 
+   387                                 
+   388                                 
+   389                                 
+   390                                 
+   391                                 
+   392                                 
+   393                                 
+   394                                 
+   395                                 [global combSort]
+   396                                 combSort:
+   397                                 
+   398                                 
+   399                                 
+   400                                 
+   401                                 
+   402                                 
+   403                                 
+   404                                 
+   405                                 
+   406                                 
+   407                                 
+   408                                 
+   409                                 
+   410 00000150 55                      push rbp
+   411 00000151 4889E5                  mov rbp, rsp
+   412 00000154 4883EC0A                sub rsp, 10
+   413                                 
+   414 00000158 C645F601                mov byte [rbp - 10], TRUE
+   415 0000015C C645F700                mov byte [rbp - 9], FALSE
+   416 00000160 C745F80C000000          mov dword [rbp - 8], 12
+   417 00000167 C745FC0A000000          mov dword [rbp - 4], 10
+   418                                 
+   419                                 
+   420                                 
+   421 0000016E 48C7C100000000         mov rcx, 0
+   422 00000175 89F1                   mov ecx, esi
+   423                                 
+   424                                 
+   425                                 OuterLoop:
+   426                                 
+   427                                 
+   428                                 
+   429 00000177 83F901                  cmp ecx, 1
+   430 0000017A 7602                    jbe Condition1False
+   431 0000017C C645F701                mov byte [rbp - 9], TRUE
+   432                                 
+   433                                  Condition1False:
+   434 00000180 807DF601                cmp byte [rbp - 10], TRUE
+   435 00000184 7602                    jbe Condition2False
+   436 00000186 C645F701                mov byte [rbp - 9], TRUE
+   437                                 
+   438                                  Condition2False:
+   439 0000018A 807DF701                cmp byte [rbp - 9], TRUE
+   440 0000018E 7553                    jne OuterLoopDone
+   441                                 
+   442                                 
+   443                                 
+   444                                 
+   445                                 
+   446                                 
+   447 00000190 48C7C000000000          mov rax, 0
+   448 00000197 89C8                    mov eax, ecx
+   449 00000199 F765FC                  mul dword [rbp - 4]
+   450 0000019C F775F8                  div dword [rbp - 8]
+   451 0000019F 89C1                    mov ecx, eax
+   452                                 
+   453                                 
+   454                                 
+   455 000001A1 83F901                  cmp ecx, 1
+   456 000001A4 7F03                    jg GapSet
+   457                                 
+   458 000001A6 B901000000              mov ecx, 1
+   459                                 
+   460                                 
+   461                                  GapSet:
+   462                                 
+   463                                 
+   464                                 
+   465                                 
+   466                                 
+   467                                 
+   468 000001AB 48C7C200000000          mov rdx, 0
+   469                                 
+   470                                 
+   471                                 
+   472 000001B2 C645F600                mov byte [rbp - 10], FALSE
+   473                                 
+   474                                 
+   475                                 
+   476                                  InnerLoop:
+   477                                 
+   478 000001B6 4989D0                  mov r8, rdx
+   479 000001B9 4901C8                  add r8, rcx
+   480                                 
+   481                                 
+   482                                 
+   483 000001BC 4139F0                  cmp r8d, esi
+   484 000001BF 731C                    jae InnerLoopDone
+   485                                 
+   486                                 
+   487                                 
+   488                                 
+   489 000001C1 448B0C97                mov r9d, dword [rdi + rdx * 4]
+   490 000001C5 468B1487                mov r10d, dword [rdi + r8 * 4]
+   491                                 
+   492                                 
+   493                                 
+   494 000001C9 4539D1                  cmp r9d, r10d
+   495 000001CC 7E0A                    jle SwapDone
+   496                                 
+   497                                 
+   498                                 
+   499 000001CE 44891497                mov dword [rdi + rdx * 4], r10d
+   500 000001D2 46890C87                mov dword [rdi + r8 * 4], r9d
+   501                                 
+   502                                 
+   503                                 
+   504 000001D6 C645F601                mov byte [rbp - 10], TRUE
+   505                                 
+   506                                 
+   507                                 
+   508                                  SwapDone:
+   509                                 
+   510                                 
+   511                                 
+   512 000001DA 48FFC2                  inc rdx
+   513                                 
+   514 000001DD EBD5                    jmp InnerLoop
+   515                                 
+   516                                 
+   517                                 
+   518                                  InnerLoopDone:
+   519                                 
+   520                                 
+   521                                 
+   522 000001DF C645F700                mov byte[rbp - 9], FALSE
+   523                                 
+   524 000001E3 EB90                    jmp OuterLoop
+   525                                 
+   526                                 
+   527                                 
+   528                                 OuterLoopDone:
+   529                                 
+   530                                 
+   531                                 
+   532                                 
+   533 000001E5 4889EC                 mov rsp, rbp
+   534 000001E8 5D                     pop rbp
+   535                                 
+   536                                 
+   537 000001E9 C3                     ret
+   538                                 
+   539                                 
+   540                                 
+   541                                 
+   542                                 
+   543                                 
+   544                                 
+   545                                 
+   546                                 
+   547                                 
+   548                                 
+   549                                 
+   550                                 
+   551                                 
+   552                                 
+   553                                 
+   554                                 
+   555                                 
+   556                                 
+   557                                 
+   558                                 
+   559                                 
+   560                                 
+   561                                 
+   562                                 
+   563                                 
+   564                                 
+   565                                 
+   566                                 
+   567                                 
+   568                                 
+   569                                 
+   570                                 
+   571                                 [global lstStats]
+   572                                 lstStats:
+   573                                 
+   574                                 
+   575                                 
+   576                                 
+   577                                 
+   578                                 
+   579 000001EA 55                      push rbp
+   580 000001EB 4889E5                  mov rbp, rsp
+   581                                 
+   582                                 
+   583                                 
+   584 000001EE 53                      push rbx
+   585 000001EF 4154                    push r12
+   586 000001F1 4155                    push r13
+   587 000001F3 4156                    push r14
+   588                                 
+   589                                 
+   590                                 
+   591 000001F5 8B07                    mov eax, dword [rdi]
+   592 000001F7 418900                  mov dword [r8], eax
+   593                                 
+   594                                 
+   595                                 
+   596 000001FA 49C7C200000000          mov r10, 0
+   597 00000201 4989F2                  mov r10, rsi
+   598 00000204 49FFCA                  dec r10
+   599 00000207 428B0497                mov eax, dword [rdi + r10 * 4]
+   600 0000020B 418901                  mov dword [r9], eax
+   601                                 
+   602                                 
+   603                                 
+   604                                 
+   605                                 
+   606                                 
+   607                                 
+   608 0000020E 4889FB                  mov rbx, rdi
+   609 00000211 4189F4                  mov r12d, esi
+   610 00000214 4989D5                  mov r13, rdx
+   611 00000217 4989CE                  mov r14, rcx
+   612                                 
+   613                                 
+   614                                 
+   615                                 
+   616 0000021A 4889DF                  mov rdi, rbx
+   617 0000021D 4489E6                  mov esi, r12d
+   618                                 
+   619 00000220 E8CF000000              call lstSum
+   620 00000225 41894500                mov dword [r13], eax
+   621                                 
+   622                                 
+   623                                 
+   624                                 
+   625 00000229 4889DF                  mov rdi, rbx
+   626 0000022C 4489E6                  mov esi, r12d
+   627                                 
+   628 0000022F E8D8000000              call lstAverage
+   629 00000234 418906                  mov dword [r14], eax
+   630                                 
+   631                                 
+   632                                 
+   633                                 
+   634                                 
+   635                                 
+   636 00000237 4889DF                  mov rdi, rbx
+   637 0000023A 4489E6                  mov esi, r12d
+   638                                 
+   639 0000023D E80B000000              call lstMedian
+   640                                 
+   641                                 
+   642                                 
+   643                                 
+   644 00000242 4C8B5D10                mov r11, qword [rbp + 16]
+   645 00000246 418903                  mov dword[r11], eax
+   646                                 
+   647                                 
+   648                                 
+   649                                 
+   650 00000249 415E                    pop r14
+   651 0000024B 415D                    pop r13
+   652 0000024D 415C                    pop r12
+   653 0000024F 5B                      pop rbx
+   654 00000250 5D                      pop rbp
+   655                                 
+   656 00000251 C3                     ret
+   657                                 
+   658                                 
+   659                                 
+   660                                 
+   661                                 
+   662                                 
+   663                                 
+   664                                 
+   665                                 
+   666                                 
+   667                                 
+   668                                 
+   669                                 
+   670                                 
+   671                                 
+   672                                 
+   673                                 
+   674                                 [global lstMedian]
+   675                                 lstMedian:
+   676                                 
+   677                                 
+   678                                 
+   679 00000252 48C7C102000000          mov rcx, 2
+   680 00000259 BA00000000              mov edx, 0
+   681 0000025E 4889F0                  mov rax, rsi
+   682 00000261 48F7F1                  div rcx
+   683                                 
+   684                                 
+   685 00000264 83FA00                  cmp edx, 0
+   686 00000267 7504                    jne OddResult
+   687                                 
+   688                                 
+   689 00000269 448B0487                mov r8d, dword [rdi + rax * 4]
+   690                                 
+   691                                 
+   692 0000026D FFC8                    dec eax
+   693                                 
+   694                                  OddResult:
+   695                                 
+   696                                 
+   697 0000026F 448B0C87                mov r9d, dword [rdi + rax * 4]
+   698                                 
+   699 00000273 4489C8                  mov eax, r9d
+   700                                 
+   701                                 
+   702 00000276 83FA00                  cmp edx, 0
+   703 00000279 7508                    jne OddResult2
+   704                                 
+   705 0000027B 4501C8                  add r8d, r9d
+   706 0000027E 4489C0                  mov eax, r8d
+   707 00000281 99                      cdq
+   708 00000282 48F7F9                  idiv rcx
+   709                                 
+   710                                 
+   711                                  OddResult2:
+   712                                 
+   713 00000285 C3                     ret
+   714                                 
+   715                                 
+   716                                 
+   717                                 
+   718                                 
+   719                                 
+   720                                 
+   721                                 
+   722                                 
+   723                                 
+   724                                 
+   725                                 
+   726                                 
+   727                                 
+   728                                 
+   729                                 
+   730                                 
+   731                                 [global lstEstMedian]
+   732                                 lstEstMedian:
+   733                                 
+   734                                 
+   735                                 
+   736 00000286 53                      push rbx
+   737 00000287 4154                    push r12
+   738 00000289 4155                    push r13
+   739                                 
+   740                                 
+   741                                 
+   742 0000028B 49C7C200000000          mov r10, 0
+   743 00000292 4989F2                  mov r10, rsi
+   744 00000295 49FFCA                  dec r10
+   745 00000298 428B0497                mov eax, dword [rdi + r10 * 4]
+   746 0000029C 89C3                    mov ebx, eax
+   747                                 
+   748                                 
+   749                                 
+   750 0000029E 8B07                    mov eax, dword [rdi]
+   751 000002A0 4189C4                  mov r12d, eax
+   752                                 
+   753                                 
+   754                                 
+   755 000002A3 48C7C102000000          mov rcx, 2
+   756 000002AA BA00000000              mov edx, 0
+   757 000002AF 4889F0                  mov rax, rsi
+   758 000002B2 48F7F1                  div rcx
+   759 000002B5 4189D5                  mov r13d, edx
+   760                                 
+   761                                 
+   762 000002B8 FFC8                    dec eax
+   763                                 
+   764                                 
+   765 000002BA 448B0487                mov r8d, dword [rdi + rax * 4]
+   766                                 
+   767                                 
+   768 000002BE FFC0                    inc eax
+   769                                 
+   770                                 
+   771 000002C0 448B0C87                mov r9d, dword [rdi + rax * 4]
+   772                                 
+   773                                 
+   774 000002C4 4401E3                  add ebx, r12d
+   775 000002C7 4401C3                  add ebx, r8d
+   776 000002CA 4401CB                  add ebx, r9d
+   777                                 
+   778                                 
+   779 000002CD 4183FD00                cmp r13d, 0
+   780 000002D1 750B                    jne OddResult3
+   781                                 
+   782 000002D3 48C7C104000000          mov rcx, 4
+   783 000002DA 89D8                    mov eax, ebx
+   784 000002DC 99                      cdq
+   785 000002DD 48F7F9                  idiv rcx
+   786                                 
+   787                                 
+   788                                  OddResult3:
+   789                                 
+   790 000002E0 4183FD00                cmp r13d, 0
+   791 000002E4 740B                    je EvenResult
+   792                                 
+   793 000002E6 48C7C103000000          mov rcx, 3
+   794 000002ED 89D8                    mov eax, ebx
+   795 000002EF 99                      cdq
+   796 000002F0 48F7F9                  idiv rcx
+   797                                 
+   798                                  EvenResult:
+   799                                 
+   800                                 
+   801                                 
+   802                                 
+   803 000002F3 415D                    pop r13
+   804 000002F5 415C                    pop r12
+   805 000002F7 5B                      pop rbx
+   806                                 
+   807 000002F8 C3                     ret
+   808                                 
+   809                                 
+   810                                 
+   811                                 
+   812                                 
+   813                                 
+   814                                 
+   815                                 
+   816                                 
+   817                                 
+   818                                 
+   819                                 
+   820                                 
+   821                                 
+   822                                 
+   823                                 
+   824                                 
+   825                                 [global lstSum]
+   826                                 lstSum:
+   827                                 
+   828 000002F9 4889FA                 mov rdx, rdi
+   829 000002FC 4889F1                 mov rcx, rsi
+   830 000002FF B800000000             mov eax, 0
+   831                                 
+   832                                 CalcLoop:
+   833                                 
+   834                                 
+   835                                 
+   836                                 
+   837 00000304 448B02                  mov r8d, dword [rdx]
+   838                                 
+   839                                 
+   840                                 
+   841                                 
+   842 00000307 4401C0                  add eax, r8d
+   843                                 
+   844                                 
+   845                                 
+   846                                 
+   847 0000030A 4883C204                add rdx, 4
+   848                                 
+   849 0000030E E2F2                   loop CalcLoop
+   850                                 
+   851                                 
+   852                                 
+   853                                 
+   854 00000310 C3                     ret
+   855                                 
+   856                                 
+   857                                 
+   858                                 
+   859                                 
+   860                                 
+   861                                 
+   862                                 
+   863                                 
+   864                                 
+   865                                 
+   866                                 
+   867                                 
+   868                                 
+   869                                 
+   870                                 
+   871                                 
+   872                                 [global lstAverage]
+   873                                 lstAverage:
+   874                                 
+   875                                 
+   876 00000311 4889FA                 mov rdx, rdi
+   877 00000314 4889F1                 mov rcx, rsi
+   878 00000317 B800000000             mov eax, 0
+   879                                 
+   880                                 GetAve:
+   881                                 
+   882                                 
+   883                                 
+   884                                 
+   885 0000031C 448B02                  mov r8d, dword [rdx]
+   886                                 
+   887                                 
+   888                                 
+   889                                 
+   890 0000031F 4401C0                  add eax, r8d
+   891                                 
+   892                                 
+   893                                 
+   894                                 
+   895 00000322 4883C204                add rdx, 4
+   896                                 
+   897 00000326 E2F2                   loop GetAve
+   898                                 
+   899                                 
+   900                                 
+   901                                 
+   902 00000328 99                     cdq
+   903 00000329 48F7FE                 idiv rsi
+   904                                 
+   905 0000032C C3                     ret
+   906                                 
+   907                                 
+   908                                 
+   909                                 
+   910                                 
+   911                                 
+   912                                 
+   913                                 
+   914                                 
+   915                                 
+   916                                 
+   917                                 
+   918                                 
+   919                                 
+   920                                 
+   921                                 
+   922                                 
+   923                                 
+   924                                 [global lstKurtosis]
+   925                                 lstKurtosis:
+   926                                 
+   927                                 
+   928                                 
+   929 0000032D 53                      push rbx
+   930                                 
+   931                                 
+   932 0000032E 89D3                    mov ebx, edx
+   933                                 
+   934                                 
+   935 00000330 48C7C100000000          mov rcx, 0
+   936                                 
+   937                                 
+   938 00000337 49C7C100000000          mov r9, 0
+   939 0000033E 49C7C200000000          mov r10, 0
+   940                                 
+   941                                 
+   942                                  SumLoop:
+   943                                 
+   944                                 
+   945 00000345 49C7C000000000          mov r8, 0
+   946 0000034C 4C63048F                movsxd r8, dword [rdi + rcx * 4]
+   947 00000350 4929D8                  sub r8, rbx
+   948                                 
+   949                                 
+   950                                 
+   951 00000353 48C7C200000000          mov rdx, 0
+   952 0000035A 48C7C000000000          mov rax, 0
+   953 00000361 4C89C0                  mov rax, r8
+   954 00000364 49F7E8                  imul r8
+   955                                 
+   956                                 
+   957 00000367 4901C2                  add r10, rax
+   958                                 
+   959 0000036A 49F7E8                  imul r8
+   960 0000036D 49F7E8                  imul r8
+   961                                 
+   962                                 
+   963 00000370 4901C1                  add r9, rax
+   964                                 
+   965                                 
+   966                                 
+   967 00000373 48FFC1                  inc rcx
+   968 00000376 39F1                    cmp ecx, esi
+   969 00000378 7CC9                    jl SumLoop
+   970                                 
+   971                                 
+   972 0000037A 48C7C000000000          mov rax, 0
+   973                                 
+   974                                 
+   975 00000381 4983FA00                cmp r10, 0
+   976 00000385 7406                    je divisor0
+   977 00000387 4C89C8                  mov rax, r9
+   978 0000038A 4899                    cqo
+   979 0000038C 49F7FA                  idiv r10
+   980                                  divisor0:
+   981                                 
+   982                                 
+   983                                 
+   984                                 
+   985 0000038F 5B                      pop rbx
+   986                                 
+   987 00000390 C3                     ret
+   988                                 
+   989                                 
+   990                                 
+   991                                 
+   992                                 
+   993                                 
+   994                                 
+   995                                 
+   996                                 
+   997                                 
+   998                                 
+   999                                 
+  1000                                 
+  1001                                 
+  1002                                 
+  1003                                 
+  1004                                 
+  1005                                 
+  1006                                 
+  1007                                 [global printString]
+  1008                                 printString:
+  1009                                 
+  1010                                 
+  1011                                 
+  1012                                 
+  1013 00000391 48C7C200000000          mov rdx, 0
+  1014                                 strCountLoop:
+  1015 00000398 803C1700                cmp byte [rdi+rdx], NULL
+  1016 0000039C 7403                    je strCountLoopDone
+  1017 0000039E 48FFC2                  inc rdx
+  1018 000003A1 EBF3                    jmp strCountLoop
+  1019                                 strCountLoopDone:
+  1020 000003A3 4883FA00                cmp rdx, 0
+  1021 000003A7 7411                    je printStringDone
+  1022                                 
+  1023                                 
+  1024                                 
+  1025                                 
+  1026 000003A9 48C7C001000000          mov rax, SYS_write
+  1027 000003B0 4889FE                  mov rsi, rdi
+  1028 000003B3 48C7C701000000          mov rdi, STDOUT
+  1029                                 
+  1030 000003BA 0F05                    syscall
+  1031                                 
+  1032                                 
+  1033                                 
+  1034                                 
+  1035                                 printStringDone:
+  1036 000003BC C3                      ret
+  1037                                 
+  1038                                 
+  1039                                 
