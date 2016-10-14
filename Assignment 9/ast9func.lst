@@ -130,7 +130,7 @@
    130                                 
    131                                 
    132 00000020 4889F7                  mov rdi, rsi
-   133 00000023 E865030000              call printString
+   133 00000023 E895030000              call printString
    134                                 
    135                                 
    136                                 
@@ -317,11 +317,11 @@
    317                                 
    318                                 
    319 000000EF 4C89EF                  mov rdi, r13
-   320 000000F2 E896020000              call printString
+   320 000000F2 E8C6020000              call printString
    321                                 
    322                                 
    323 000000F7 4C89E7                  mov rdi, r12
-   324 000000FA E88E020000              call printString
+   324 000000FA E8BE020000              call printString
    325                                 
    326                                 
    327 000000FF E91FFFFFFF              jmp initializeSDLs
@@ -332,11 +332,11 @@
    332                                 
    333                                 
    334 00000104 4C89F7                  mov rdi, r14
-   335 00000107 E881020000              call printString
+   335 00000107 E8B1020000              call printString
    336                                 
    337                                 
    338 0000010C 4C89E7                  mov rdi, r12
-   339 0000010F E879020000              call printString
+   339 0000010F E8A9020000              call printString
    340                                 
    341                                 
    342 00000114 E90AFFFFFF              jmp initializeSDLs
@@ -347,11 +347,11 @@
    347                                 
    348                                 
    349 00000119 4C89FF                  mov rdi, r15
-   350 0000011C E86C020000              call printString
+   350 0000011C E89C020000              call printString
    351                                 
    352                                 
    353 00000121 4C89E7                  mov rdi, r12
-   354 00000124 E864020000              call printString
+   354 00000124 E894020000              call printString
    355                                 
    356                                 
    357 00000129 E9F5FEFFFF              jmp initializeSDLs
@@ -940,114 +940,135 @@
    940                                 
    941                                 
    942                                 
-   943 0000032E 53                      push rbx
-   944                                 
-   945                                 
-   946 0000032F 89D3                    mov ebx, edx
+   943 0000032E 55                      push rbp
+   944 0000032F 4889E5                  mov rbp, rsp
+   945 00000332 4883EC20                sub rsp, 32
+   946                                 
    947                                 
    948                                 
-   949 00000331 48C7C100000000          mov rcx, 0
+   949 00000336 53                      push rbx
    950                                 
    951                                 
-   952 00000338 49C7C100000000          mov r9, 0
-   953 0000033F 49C7C200000000          mov r10, 0
-   954                                 
-   955                                 
-   956                                  SumLoop:
-   957                                 
-   958                                 
-   959 00000346 49C7C000000000          mov r8, 0
-   960 0000034D 4C63048F                movsxd r8, dword [rdi + rcx * 4]
-   961 00000351 4929D8                  sub r8, rbx
+   952                                 
+   953                                 
+   954 00000337 48C745F000000000        mov qword [rbp - 16], 0
+   955 0000033F 48C745F800000000        mov qword [rbp - 8], 0
+   956                                 
+   957 00000347 48C745E000000000        mov qword [rbp - 32], 0
+   958 0000034F 48C745E800000000        mov qword [rbp - 24], 0
+   959                                 
+   960                                 
+   961 00000357 4863DA                  movsxd rbx, edx
    962                                 
    963                                 
-   964                                 
-   965 00000354 48C7C200000000          mov rdx, 0
-   966 0000035B 48C7C000000000          mov rax, 0
-   967 00000362 4C89C0                  mov rax, r8
-   968 00000365 49F7E8                  imul r8
+   964 0000035A 48C7C100000000          mov rcx, 0
+   965                                 
+   966                                 
+   967                                 
+   968                                 
    969                                 
    970                                 
-   971 00000368 4901C2                  add r10, rax
+   971                                  SumLoop:
    972                                 
-   973 0000036B 49F7E8                  imul r8
-   974 0000036E 49F7E8                  imul r8
-   975                                 
-   976                                 
-   977 00000371 4901C1                  add r9, rax
+   973                                 
+   974 00000361 49C7C000000000          mov r8, 0
+   975 00000368 4C63048F                movsxd r8, dword [rdi + rcx * 4]
+   976 0000036C 4929D8                  sub r8, rbx
+   977                                 
    978                                 
    979                                 
-   980                                 
-   981 00000374 48FFC1                  inc rcx
-   982 00000377 39F1                    cmp ecx, esi
-   983 00000379 7CC9                    jl SumLoop
+   980 0000036F 48C7C200000000          mov rdx, 0
+   981 00000376 48C7C000000000          mov rax, 0
+   982 0000037D 4C89C0                  mov rax, r8
+   983 00000380 49F7E8                  imul r8
    984                                 
    985                                 
-   986 0000037B 48C7C000000000          mov rax, 0
-   987                                 
+   986 00000383 480155E0                add qword [rbp - 32], rdx
+   987 00000387 480145E8                add qword [rbp - 24], rax
    988                                 
-   989 00000382 4983FA00                cmp r10, 0
-   990 00000386 7406                    je divisor0
-   991 00000388 4C89C8                  mov rax, r9
-   992 0000038B 4899                    cqo
-   993 0000038D 49F7FA                  idiv r10
-   994                                  divisor0:
+   989 0000038B 49F7E8                  imul r8
+   990 0000038E 49F7E8                  imul r8
+   991                                 
+   992                                 
+   993 00000391 480155F0                add qword [rbp - 16], rdx
+   994 00000395 480145F8                add qword [rbp - 8], rax
    995                                 
    996                                 
    997                                 
-   998                                 
-   999 00000390 5B                      pop rbx
-  1000                                 
-  1001 00000391 C3                     ret
+   998 00000399 48FFC1                  inc rcx
+   999 0000039C 39F1                    cmp ecx, esi
+  1000 0000039E 7CBF                    jl SumLoop
+  1001                                 
   1002                                 
-  1003                                 
+  1003 000003A0 48C7C000000000          mov rax, 0
   1004                                 
   1005                                 
-  1006                                 
-  1007                                 
-  1008                                 
-  1009                                 
-  1010                                 
-  1011                                 
-  1012                                 
+  1006 000003A7 4C8B55E8                mov r10, qword [rbp - 24]
+  1007 000003AB 4983FA00                cmp r10, 0
+  1008 000003AF 7409                    je divisor0
+  1009 000003B1 488B45F8                mov rax, qword [rbp - 8]
+  1010 000003B5 488B55F0                mov rdx, qword [rbp - 16]
+  1011 000003B9 49F7FA                  idiv r10
+  1012                                  divisor0:
   1013                                 
   1014                                 
   1015                                 
   1016                                 
-  1017                                 
+  1017 000003BC 5B                      pop rbx
   1018                                 
-  1019                                 
-  1020                                 
-  1021                                 [global printString]
-  1022                                 printString:
+  1019 000003BD 4889EC                  mov rsp, rbp
+  1020 000003C0 5D                      pop rbp
+  1021                                 
+  1022 000003C1 C3                     ret
   1023                                 
   1024                                 
   1025                                 
   1026                                 
-  1027 00000392 48C7C200000000          mov rdx, 0
-  1028                                 strCountLoop:
-  1029 00000399 803C1700                cmp byte [rdi+rdx], NULL
-  1030 0000039D 7403                    je strCountLoopDone
-  1031 0000039F 48FFC2                  inc rdx
-  1032 000003A2 EBF3                    jmp strCountLoop
-  1033                                 strCountLoopDone:
-  1034 000003A4 4883FA00                cmp rdx, 0
-  1035 000003A8 7411                    je printStringDone
+  1027                                 
+  1028                                 
+  1029                                 
+  1030                                 
+  1031                                 
+  1032                                 
+  1033                                 
+  1034                                 
+  1035                                 
   1036                                 
   1037                                 
   1038                                 
   1039                                 
-  1040 000003AA 48C7C001000000          mov rax, SYS_write
-  1041 000003B1 4889FE                  mov rsi, rdi
-  1042 000003B4 48C7C701000000          mov rdi, STDOUT
-  1043                                 
-  1044 000003BB 0F05                    syscall
+  1040                                 
+  1041                                 
+  1042                                 [global printString]
+  1043                                 printString:
+  1044                                 
   1045                                 
   1046                                 
   1047                                 
-  1048                                 
-  1049                                 printStringDone:
-  1050 000003BD C3                      ret
-  1051                                 
-  1052                                 
-  1053                                 
+  1048 000003C2 48C7C200000000          mov rdx, 0
+  1049                                 strCountLoop:
+  1050 000003C9 803C1700                cmp byte [rdi+rdx], NULL
+  1051 000003CD 7403                    je strCountLoopDone
+  1052 000003CF 48FFC2                  inc rdx
+  1053 000003D2 EBF3                    jmp strCountLoop
+  1054                                 strCountLoopDone:
+  1055 000003D4 4883FA00                cmp rdx, 0
+  1056 000003D8 7411                    je printStringDone
+  1057                                 
+  1058                                 
+  1059                                 
+  1060                                 
+  1061 000003DA 48C7C001000000          mov rax, SYS_write
+  1062 000003E1 4889FE                  mov rsi, rdi
+  1063 000003E4 48C7C701000000          mov rdi, STDOUT
+  1064                                 
+  1065 000003EB 0F05                    syscall
+  1066                                 
+  1067                                 
+  1068                                 
+  1069                                 
+  1070                                 printStringDone:
+  1071 000003ED C3                      ret
+  1072                                 
+  1073                                 
+  1074                                 

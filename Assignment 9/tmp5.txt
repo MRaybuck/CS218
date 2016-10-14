@@ -14,5 +14,5 @@ Sorted List:
   Minimum =         -5832
   Maximum =          -729
    Median =         -2187
- Kurtosis =      92549341
+ Kurtosis =       5422624
 

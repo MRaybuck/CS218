@@ -937,19 +937,34 @@ ret
 global lstKurtosis
 lstKurtosis:
 
+	;-----
+	; Setup Stack Dynamic Locals
+	push rbp
+	mov rbp, rsp
+	sub rsp, 32
+
 	; -----
 	; push maintained registers (rbx, r12, r13, r14, r15)
 	push rbx
 
+	; -----
+	; Initialize SDLs
+
+	mov qword [rbp - 16], 0 ; 4th power ans upper 64 bits = 0
+	mov qword [rbp - 8], 0  ; 4th power ans lower 64 bits = 0
+
+	mov qword [rbp - 32], 0 ; 2nd power ans upper 64 bits = 0
+	mov qword [rbp - 24], 0 ; 2nd power ans lower 64 bits = 0
+
 	; move ave out of rdx
-	mov ebx, edx
+	movsxd rbx, edx
 
 	; set rcx to length
 	mov rcx, 0
 
 	; data prep
-	mov r9, 0
-	mov r10, 0
+	;mov r9, 0
+	;mov r10, 0
 
 	; start sum loop
 	SumLoop:
@@ -967,13 +982,15 @@ lstKurtosis:
 		imul r8
 
 		; keep running sum of divisor in quad register
-		add r10, rax
+		add qword [rbp - 32], rdx	; upper 64
+		add qword [rbp - 24], rax	; lower 64
 
 		imul r8
 		imul r8
 
 		; keep running sum of dividend in a quad register
-		add r9, rax
+		add qword [rbp - 16], rdx 	; upper 64
+		add qword [rbp - 8], rax 	; lower 64
 		
 
 
@@ -985,10 +1002,11 @@ lstKurtosis:
 	mov rax, 0
 
 	; if divisor is == 0
+	mov r10, qword [rbp - 24]
 	cmp r10, 0
 	je divisor0
-		mov rax, r9
-		cqo
+		mov rax, qword [rbp - 8]
+		mov rdx, qword [rbp - 16]
 		idiv r10
 	divisor0:
 
@@ -996,7 +1014,10 @@ lstKurtosis:
 	; pop used registers
 
 	pop rbx
-
+	
+	mov rsp, rbp
+	pop rbp
+	
 ret
 
 

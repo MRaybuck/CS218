@@ -51,15 +51,10 @@ ESC		equ	27
 ; -----
 ;  Data Sets for Assignment #8.
 
-list1		dd	 2746,  2785,  2641, -2417,  2660
-		dd	-2853,  2897,  2259,  2375, -2220
-		dd	 2968,  2454, -2120,  2123,  2233
-		dd	 1851, -1231,  1542, -1146,  1460
-		dd	 1195,  1351, -1197,  1195,  1120
-		dd	-1196,  1105,  1200,  1730,  1871
-		dd	 1187,  1121,  1872, -2287,  1567
-		dd	 2411,  2562
-len1		dd	37
+list1		dd	-5832,  -5103,  -4374,  -3645,  -2916
+		dd	-2916,  -2187,  -2187,  -2187,  -1458
+		dd	-1458,  -729,  -729
+len1		dd	13
 estMed1		dd	0
 med1		dd	0
 sum1		dd	0
@@ -171,10 +166,10 @@ main:
 	call	combSort
 
 ;  call lstEstMedian(list, len)
-	mov	rdi, list1
-	mov	esi, dword [len1]
-	call	lstEstMedian
-	mov	dword [estMed1], eax
+;	mov	rdi, list1
+;	mov	esi, dword [len1]
+;	call	lstEstMedian
+;	mov	dword [estMed1], eax
 
 ;  call lstStats(list, len, sum, ave, min, max, med)
 	mov	rdi, list1

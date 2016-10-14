@@ -63,29 +63,7 @@ section	.bss
 section	.text
 
 ; **********************************************************************************
-;  Comb Sort Algorithm:
-
-;  void function combSort(array, length)
-;     gap = length
-;
-;     outter loop until gap = 1 and swapped = false
-;         gap = (gap * 10) / 12	     			// update gap for next sweep
-;         if gap < 1
-;           gap = 1
-;         end if
-;
-;         i = 0
-;         swapped = false
-;
-;         inner loop until i + gap >= length	       // single comb sweep
-;             if  array[i] > array[i+gap]
-;                 swap(array[i], array[i+gap])
-;                 swapped = true
-;             end if
-;             i = i + 1
-;         end inner loop
-;      end outter loop
-;  end function
+;  Perform comb sort
 
 ; -----
 ;  HLL Call:
@@ -97,6 +75,7 @@ section	.text
 
 ;  Returns:
 ;	sorted list (list passed by reference)
+
 
 global	combSort
 combSort:
@@ -196,9 +175,9 @@ OuterLoop:
 		mov r10d, dword [rdi + r8 * 4] ; array[i+gap]
 
 		; -----
-		; if  array[i] < array[i+gap]
+		; if  array[i] > array[i+gap]
 		cmp r9d, r10d
-		jg SwapDone
+		jle SwapDone
 
 			; -----
 			; swap(array[i], array[i+gap])
@@ -243,7 +222,6 @@ pop rbp
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Find statistical information for a list of integers:
 ;	sum, average, minimum, maximum, and, median
@@ -252,8 +230,8 @@ ret
 ;  the middle value.  For an even number of values, it is the integer
 ;  average of the two middle values.
 
-;  This function must call the lstSum(), lstMedian(), and
-;  lstAvergae() functions.
+;  This function must call the lstAvergae() function
+;  to get the average.
 
 ;  Note, assumes the list is already sorted.
 
@@ -262,17 +240,18 @@ ret
 ;	call lstStats(list, len, sum, ave, min, max, med)
 
 ;  Arguments Passed:
-;	1) list, addr - rdi
-;	2) length, value - rsi
-;	3) sum, addr - rdx
-;	4) average, addr - rcx
-;	5) minimum, addr - r8
-;	6) maximum, addr - r9
-;	7) median, addr - stack, rbp+16
+;	list, addr - rdi
+;	length, value - rsi
+;	sum, addr - rdx
+;	average, addr - rcx
+;	minimum, addr - r8
+;	maximum, addr - r9
+;	median, addr - stack, rbp+16
 
 ;  Returns:
 ;	sum, average, minimum, maximum, and median
 ;		via pass-by-reference
+
 
 global lstStats
 lstStats:
@@ -293,17 +272,17 @@ lstStats:
 	push r14
 
 	; -----
-	; Find Max
+	; Find Min
 	mov eax, dword [rdi]
-	mov dword [r9], eax
+	mov dword [r8], eax
 
 	; -----
-	; Find min
+	; Find Max
 	mov r10, 0
 	mov r10, rsi
 	dec r10
 	mov eax, dword [rdi + r10 * 4]
-	mov dword [r8], eax
+	mov dword [r9], eax
 
 	; ----------
 	; lstSum Function Call
@@ -362,7 +341,6 @@ lstStats:
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Function to calculate the median of a sorted list.
 
@@ -376,6 +354,7 @@ ret
 
 ;  Returns:
 ;	median (in eax)
+
 
 global	lstMedian
 lstMedian:
@@ -419,7 +398,6 @@ lstMedian:
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Function to calculate the median of a sorted list.
 
@@ -432,7 +410,8 @@ ret
 ;	1) length, value - rsi
 
 ;  Returns:
-;	sum (in eax)
+;	estimated median (in eax)
+
 
 global	lstEstMedian
 lstEstMedian:
@@ -513,7 +492,6 @@ lstEstMedian:
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Function to calculate the sum of a list.
 
@@ -527,6 +505,7 @@ ret
 
 ;  Returns:
 ;	sum (in eax)
+
 
 global	lstSum
 lstSum:
@@ -560,7 +539,6 @@ loop CalcLoop
 ret
 
 
-
 ; --------------------------------------------------------
 ;  Function to calculate the average of a list.
 
@@ -574,6 +552,7 @@ ret
 
 ;  Returns:
 ;	average (in eax)
+
 
 global	lstAverage
 lstAverage:
@@ -606,10 +585,9 @@ loop GetAve
 ; jne GetAve
 
 cdq
-idiv rsi
+idiv esi
 
 ret
-
 
 
 ; --------------------------------------------------------
@@ -627,22 +605,38 @@ ret
 ;  Returns:
 ;	kurtosis statistic (in rax)
 
+
 global lstKurtosis
 lstKurtosis:
+
+	;-----
+	; Setup Stack Dynamic Locals
+	push rbp
+	mov rbp, rsp
+	sub rsp, 32
 
 	; -----
 	; push maintained registers (rbx, r12, r13, r14, r15)
 	push rbx
 
+	; -----
+	; Initialize SDLs
+
+	mov qword [rbp - 16], 0 ; 4th power ans upper 64 bits = 0
+	mov qword [rbp - 8], 0  ; 4th power ans lower 64 bits = 0
+
+	mov qword [rbp - 32], 0 ; 2nd power ans upper 64 bits = 0
+	mov qword [rbp - 24], 0 ; 2nd power ans lower 64 bits = 0
+
 	; move ave out of rdx
-	mov ebx, edx
+	movsxd rbx, edx
 
 	; set rcx to length
 	mov rcx, 0
 
 	; data prep
-	mov r9, 0
-	mov r10, 0
+	;mov r9, 0
+	;mov r10, 0
 
 	; start sum loop
 	SumLoop:
@@ -660,13 +654,15 @@ lstKurtosis:
 		imul r8
 
 		; keep running sum of divisor in quad register
-		add r10, rax
+		add qword [rbp - 32], rdx	; upper 64
+		add qword [rbp - 24], rax	; lower 64
 
 		imul r8
 		imul r8
 
 		; keep running sum of dividend in a quad register
-		add r9, rax
+		add qword [rbp - 16], rdx 	; upper 64
+		add qword [rbp - 8], rax 	; lower 64
 		
 
 
@@ -678,10 +674,11 @@ lstKurtosis:
 	mov rax, 0
 
 	; if divisor is == 0
+	mov r10, qword [rbp - 24]
 	cmp r10, 0
 	je divisor0
-		mov rax, r9
-		cqo
+		mov rax, qword [rbp - 8]
+		mov rdx, qword [rbp - 16]
 		idiv r10
 	divisor0:
 
@@ -689,9 +686,9 @@ lstKurtosis:
 	; pop used registers
 
 	pop rbx
-
+mov rsp, rbp
+pop rbp
 ret
-
 
 
 ; ********************************************************************************

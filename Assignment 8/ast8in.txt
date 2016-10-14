@@ -1,5 +1,5 @@
 echo \n\n
-break 200
+break 190
 run
 set pagination off
 set logging file a8out.txt
