@@ -131,21 +131,21 @@ readNonaryNum:
 	mov rdi, rsi
 	call printString
 
-push rbx
-
 ;-----
 ; initialize SDLs
 
 initializeSDLs:
 
+	push rbx
+
 	mov dword [rbp - 56], 0		; dword rsum = 0
 	mov byte [rbp - 57], FALSE	; byte DoNeg = FALSE
 	mov byte [rbp - 58], 0		; ChrCnt = 0
-	lea rbx, byte [rbp - 51]	; stick addr of line into rcx
+	lea rbx, byte [rbp - 51]	; stick addr of line into rbx
 
 
-;-----
-; Read character from user
+;--------------------------------------------------------------------------------
+; ----- Read character from user
 
 NxtChrLp:
 
@@ -164,14 +164,14 @@ NxtChrLp:
 	cmp al, LF
 	je inputDone
 
-	; Continue reading characters from user but check if line length has been reach. Yes? Don't store anything beyond 50 characters
+	; If user exceeded input max, then don't store anymore characters.
 	mov cl, byte [rbp - 58]
 	cmp cl, 50
 	ja SkipStorage
 
-	; chr storage code
-	mov byte [rbx], al
-	inc rbx
+		; chr storage code
+		mov byte [rbx], al
+		inc rbx
 
 	; jump location to skip storage if input exceeds max
 	SkipStorage:
@@ -184,25 +184,23 @@ jmp NxtChrLp
 inputDone:
 
 ;-----
+; Finish off string with a NULL character
+
+; append NULL to end of line
+mov byte [rbx], NULL
+
+;-----
+; pop address of numberRead off the stack
+pop rbx
+
+;-----
 ; Was the input too long?
 
 ; if (ChrCnt > 50) then ERROR
 mov al, byte [rbp - 58]
-cmp al, 51
-jbe ValidInputSize
+cmp al, 50
+ja ErrInput2long
 
-	; print error
-	mov rdi, r15 ; set argument for passing (error3)
-	call printString
-	
-	; reprompt for input
-	mov rdi, r12 ; set argument for passing (promptStr)
-	call printString
-
-	; jump to top of function
-	jmp initializeSDLs
-
-ValidInputSize:
 
 ; if (ChrCnt == 1) then return false
 mov al, byte [rbp - 58]
@@ -217,9 +215,6 @@ jne ContinueFunc
 	pop r12
 	pop rbx
 
-	; ret TRUE (place TRUE in rax)
-	mov rax, TRUE
-
 	mov rsp, rbp
 	pop rbp
 
@@ -230,17 +225,7 @@ ContinueFunc:
 
 
 ;-----
-; Finish off string with a NULL character
-
-; append NULL to end of line
-mov byte [rbx], NULL
-
-pop rbx
-
-;-----
 ; Setup for erroring checking loop
-
-; string iterator = 0
 
 ; reset position of rcx addr
 lea rcx, byte [rbp - 51]
@@ -252,59 +237,36 @@ lea rcx, byte [rbp - 51]
 
 ErrChkLp
 
-	; if space chr then jmp to ErrChkLpSetup
+	; if space chr then jmp to SpaceDetected
 	mov al, byte [rcx]
 	cmp al, ' '
-	je ErrChkLpSetup
+	je SpaceDetected
 
 		; is first character sign?
 		cmp al, '+'
 		je PlusFound
 
+			; first chr is not a sign? Error! (jmp ErrInvIn)
 			cmp al, '-'
-			je MinusFound
-				; first chr is not a sign? Error! (jmp ErrInvIn)
+			jne ErrInvInput
 				
-				; print error
-				mov rdi, r13 ; set argument for passing (error1)
-				call printString
-				
-				; reprompt for input
-				mov rdi, r12 ; set argument for passing (promptStr)
-				call printString
-
-				; jump to top of function
-				jmp initializeSDLs
-
-				; trying to hide this error in a part of the function that is inaccessible otherwise
-				ErrOutOfRange:
-
-					; print error
-					mov rdi, r14 ; set argument for passing (error2)
-					call printString
-					
-					; reprompt for input
-					mov rdi, r12 ; set argument for passing (promptStr)
-					call printString
-
-					; jump to top of function
-					jmp initializeSDLs
-				
-			; if (sign == '-') DoNeg = TRUE
-			MinusFound:
+				; sign == '-' so DoNeg = TRUE
 				mov byte [rbp - 57], TRUE
 
 		PlusFound:
+			; line[i] == a sign, so inc to next character for next round of error checking
 			inc rcx
-			mov al, byte[rcx]
+
 		WithinRangeChk:
 			mov al, byte [rcx]
 
 			; chr within range? '0' - '8'
+			cmp al, '9'
+			je ErrOutOfRange
 			cmp al, '0'
-			jb ErrOutOfRange
+			jb ErrInvInput
 			cmp al, '8'
-			ja ErrOutOfRange
+			ja ErrInvInput
 			
 			;-----	
 			; convert nonary to int and place in rsum
@@ -325,28 +287,80 @@ ErrChkLp
 			; inc string position
 			inc rcx
 
-			; check if line[i] == NULL
+			; check if line[i+1] == NULL
 			cmp byte [rcx], NULL
 			je ExitErrChk
 
 		jmp WithinRangeChk
 
 
-	ErrChkLpSetup:
+	SpaceDetected:
 
 	; inc string position
 	inc rcx
 
-	; check if line[i] == NULL
+	; check if line[i+1] == NULL
+	; at this point if that is the case then user only entered spaces so show invalid input error.
 	cmp byte [rcx], NULL
-	je ExitErrChk
+	je ErrInvInput
 
 ;line[i] != NULL jmp ErrChkLp
 jmp ErrChkLp
 
+;--------------------------------------------------------------------------------
+; ----- List of Errors
+
+; ----------------------
+; Error 1: Invalid Input
+ErrInvInput:
+
+	; print error
+	mov rdi, r13 ; set argument for passing (error1)
+	call printString
+	
+	; reprompt for input
+	mov rdi, r12 ; set argument for passing (promptStr)
+	call printString
+
+	; jump to top of function
+	jmp initializeSDLs
+
+; ----------------------
+; Error 2: Out of Range
+ErrOutOfRange:
+
+	; print error
+	mov rdi, r14 ; set argument for passing (error2)
+	call printString
+	
+	; reprompt for input
+	mov rdi, r12 ; set argument for passing (promptStr)
+	call printString
+
+	; jump to top of function
+	jmp initializeSDLs
+
+; ----------------------
+; Error 3: Input too long
+ErrInput2long:
+
+	; print error
+	mov rdi, r15 ; set argument for passing (error3)
+	call printString
+	
+	; reprompt for input
+	mov rdi, r12 ; set argument for passing (promptStr)
+	call printString
+
+	; jump to top of function
+	jmp initializeSDLs
+
 ;-----
-; End of Error Check loop
+; End of Error Checking
 ExitErrChk:
+
+;-----
+; If negative number then do negation of rsum
 
 mov al, byte [rbp - 57]
 cmp al, TRUE
@@ -899,7 +913,7 @@ loop GetAve
 ; jne GetAve
 
 cdq
-idiv rsi
+idiv esi
 
 ret
 
