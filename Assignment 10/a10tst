@@ -1,0 +1,290 @@
+#!/bin/bash
+# CS 218, assignment #10 test script.
+
+# ---------------------------------------------------------
+# Initial checks.
+#	Ensure executable file exists.
+
+if [ -z $1 ]; then
+	echo "Error, must provide executable file name."
+	exit
+fi
+#
+if [ ! -e $1 ] || [ ! -x $1 ]; then
+	echo "Error, unable to find $1 executable file."
+	exit
+fi
+#
+# ---------------------------------------------------------
+# Define script variables and function
+#
+bolded=`tput bold`
+normal=`tput sgr0`
+#
+pause() {
+	if [ "$1" = "skip" ]; then
+		echo
+	else
+		echo
+		echo -n "Press return to continue"
+		read
+		clear
+	fi
+}
+#
+# ---------------------------------------------------------
+# Display initial page
+#
+clear
+echo
+echo
+echo ${bolded}Assignment 10 - Error Testing Utility${normal}
+echo
+echo
+echo
+echo "Various tests should generate appropriate error messages."
+echo
+echo
+echo "Note, this utility assumes the program is working or very"
+echo "      close to working.  Testing on an incomplete"
+echo "      program will not be useful."
+echo
+echo
+pause $2
+#
+# ---------------------------------------------------------
+# Begin tests.
+#
+echo
+echo "------------------------------------"
+echo "Error testing -> usage message"
+echo "     $1 should show usage message"
+echo
+echo
+echo ${bolded}$1${normal}
+./$1
+echo
+#
+echo ${bolded}$1${normal}
+./$1     
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> wrong number of command line arguments"
+echo "     $1 should show error message for invalid command line arguments"
+echo
+echo
+echo ${bolded}$1 -pw${normal}
+./$1 -pw
+echo
+#
+echo ${bolded}$1 - -sp 1 -cl 34401103 -sz 615${normal}
+./$1 - -sp 1 -cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 -sz 615 extra${normal}
+./$1 -sp 1 -cl 34401103 -sz 615 extra
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 -sz615${normal}
+./$1 -sp 1 -cl 34401103 -sz615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 3440 1103 -sz 615${normal}
+./$1 -sp 1 -cl 3440 1103 -sz 615
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> wrong or bad draw speed specifier (-sp)"
+echo "     $1 should show error message for speed specifier"
+echo
+echo
+#
+echo ${bolded}$1 -s 1 -cl 34401103 -sz 615${normal}
+./$1 -s 1 -cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -spp 1 -cl 34401103 -sz 615${normal}
+./$1 -spp 1 -cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 sp 1 -cl 34401103 -sz 615${normal}
+./$1 sp 1 -cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 --sp 1 -cl 34401103 -sz 615${normal}
+./$1 --sp 1 -cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -ps- 1 -cl 34401103 -sz 615${normal}
+./$1 ps- 1 -cl 34401103 -sz 615
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> speed values"
+echo "     $1 should show error message for speed value"
+echo
+echo
+#
+echo ${bolded}$1 -sp 56 -cl 34401103 -sz 615${normal}
+./$1 -sp 56 -cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 0 -cl 34401103 -sz 615${normal}
+./$1 -sp 0 -cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 101 -cl 34401103 -sz 615${normal}
+./$1 -sp 101 -cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 19 -cl 34401103 -sz 615${normal}
+./$1 -sp 19 -cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1q1 -cl 34401103 -sz 615${normal}
+./$1 -sp 1q -cl 34401103 -sz 615
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> wrong or bad color specifier (-cl)"
+echo "     $1 should show error message for incorrect color specifier"
+echo
+echo
+#
+echo ${bolded}$1 -sp 1 -c 34401103 -sz 615${normal}
+./$1 -sp 1 -c 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 cl 34401103 -sz 615${normal}
+./$1 -sp 1 cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 --cl 34401103 -sz 615${normal}
+./$1 -sp 1 --cl 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cll 34401103 -sz 615${normal}
+./$1 -sp 1 -cll 34401103 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 lc- 34401103 -sz 615${normal}
+./$1 -sp 1 lc- 34401103 -sz 615
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> draw color value"
+echo "     $1 should show error message for color value"
+echo
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34511011 -sz 615${normal}
+./$1 -sp 1 -cl 34511011 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl -1 -sz 615${normal}
+./$1 -sp 1 -cl -1 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl zero -sz 615${normal}
+./$1 -sp 1 -cl zero -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401903 -sz 615${normal}
+./$1 -sp 1 -cl 34401903 -sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 344x1103 -sz 615${normal}
+./$1 -sp 1 -cl 344x1103 -sz 615
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> wrong or bad screen size specifier (-sz)"
+echo "     $1 should show error message for incorrect size specifier"
+echo
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 -s 615${normal}
+./$1 -sp 1 -cl 34401103 -s 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 sz 615${normal}
+./$1 -sp 1 -cl 34401103 sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 --sz 615${normal}
+./$1 -sp 1 -cl 34401103 --sz 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 -szz 615${normal}
+./$1 -sp 1 -cl 34401103 -szz 615
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 zs- 615${normal}
+./$1 -sp 1 -cl 34401103 zs- 615
+echo
+#
+pause $2
+# ----------------------
+#
+echo "------------------------------------"
+echo "Error testing -> window size value"
+echo "     $1 should show error message for size value"
+echo
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 -sz 100${normal}
+./$1 -sp 1 -cl 34401103 -sz 100
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 -sz 2663${normal}
+./$1 -sp 1 -cl 34401103 -sz 2663
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 -sz 695${normal}
+./$1 -sp 1 -cl 34401103 -sz 695
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 -sz 6x5${normal}
+./$1 -sp 1 -cl 34401103 -sz 6x5
+echo
+#
+echo ${bolded}$1 -sp 1 -cl 34401103 -sz 6150${normal}
+./$1 -sp 1 -cl 34401103 -sz 6150
+echo
+#
+pause $2
+#
+# ---------------------------------
+# OK, final test is to display image
+#
+echo "------------------------------------"
+echo "Final test -> display"
+echo "     $1 should show the image"
+echo "     Type q or x to terminate"
+echo
+echo
+echo ${bolded}$1 -sp 1 -cl 34401103 -sz 615${normal}
+echo
+pause $2
+./$1 -sp 1 -cl 34401103 -sz 615
+
+
