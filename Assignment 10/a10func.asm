@@ -302,10 +302,98 @@ getParams:
 			ja Err4
 
 		;-----
-		; Check second argument == '-cl'
-		
+		; Check second argument == '-cl' (Err5)
 
+			; get address of ARGV[3]
+			mov rbx, qword[r12 + 24]
 
+			; if (ARGV[3] != '-cl') then Err5
+			cmp dword[rbx], 0x006c632d 	; compare the first 4 bytes to the expected input (in HEX and backwards).
+			jne Err5
+
+		;-----
+		; Check color value specified is correct (Err6)
+
+			; get address of ARGV[4] (color value)
+			mov rbx, qword[r12 + 32] ; +32 for ARGV[4] (4[position in array] * 8[quad size])
+
+			; loop over each character to verify it's within range
+			RangeCkLp2:
+
+				mov al, byte [rbx]
+
+				; chr within range? '0' - '8' (Err6)
+				cmp al, '0'
+				jb Err6
+				cmp al, '8'
+				ja Err6
+
+			; loop RangeCkLp
+			inc rbx
+			cmp byte[rbx], NULL
+			jne RangeCkLp2
+
+			;-----
+			; convert ASCII nonary to integer (base 10)
+
+			; get addr of ARGV[4] again
+			mov rbx, qword[r12 + 32] ; +32 for ARGV[4] (4[position in array] * 8[quad size])
+
+			; call nonary2int macro
+			nonary2int rbx, rcx
+
+			; check if value is within range
+			cmp rdx, CLR_MIN
+			jb Err6
+			cmp rdx, CLR_MAX
+			ja Err6
+
+		;-----
+		; Check third argument == '-sz' (Err7)
+
+			; get address of ARGV[5]
+			mov rbx, qword[r12 + 40]
+
+			; if (ARGV[5] != '-sz') then Err7
+			cmp dword[rbx], 0x007a732d 	; compare the first 4 bytes to the expected input (in HEX and backwards).
+			jne Err7
+
+		;-----
+		; Check size value specified is correct (Err8)
+
+			; get address of ARGV[6] (size value)
+			mov rbx, qword[r12 + 48] ; +48 for ARGV[6] (6[position in array] * 8[quad size])
+
+			; loop over each character to verify it's within range
+			RangeCkLp3:
+
+				mov al, byte [rbx]
+
+				; chr within range? '0' - '8' (Err8)
+				cmp al, '0'
+				jb Err8
+				cmp al, '8'
+				ja Err8
+
+			; loop RangeCkLp
+			inc rbx
+			cmp byte[rbx], NULL
+			jne RangeCkLp3
+
+			;-----
+			; convert ASCII nonary to integer (base 10)
+
+			; get addr of ARGV[6] again
+			mov rbx, qword[r12 + 48] ; +48 for ARGV[6] (6[position in array] * 8[quad size])
+
+			; call nonary2int macro
+			nonary2int rbx, r8
+
+			; check if value is within range
+			cmp rdx, SIZ_MIN
+			jb Err8
+			cmp rdx, SIZ_MAX
+			ja Err8
 
 
 	; No Errors Found.
