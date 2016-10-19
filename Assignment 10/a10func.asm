@@ -36,8 +36,8 @@
 ;   next loop
 ;   return final result (from running sum)
 
-; Note,	<stringAddr> is passed as address in RSI
-;	<integerAddr> is passed as address on RDI
+; Note,	<stringAddr> is passed as address
+;	<integerAddr> is passed as address
 
 %macro	nonary2int	2
 
@@ -45,12 +45,15 @@
 ; -----
 	; Algorithm:
 	
-	;	runningSum = 0
-
-		mov qword [%2], 0
 
 	; push r13 so marcro can use it
 	push r13
+
+	; rsum = 0
+	mov qword [%2], 0
+
+	; initialize nonary converter register
+	mov r13d, 0
 
 	;   startLoop
 	%%CvtLoop:
@@ -58,7 +61,7 @@
 			;	convert character to integer (integerDigit)
 
 			mov r13b, byte [%1]
-			sub r13b, "0"
+			sub r13b, '0'
 
 			;	runningSum = runningSum * 9
 			
@@ -235,6 +238,7 @@ getParams:
 
 	;-----
 	; push maintained registers (rbx, r12, r13, r14, r15)
+	push rbx
 	push r12
 
 	;----------
@@ -296,9 +300,9 @@ getParams:
 			nonary2int rbx, rdx
 
 			; check if value is within range
-			cmp rdx, SPD_MIN
+			cmp dword [rdx], SPD_MIN
 			jb Err4
-			cmp rdx, SPD_MAX
+			cmp dword [rdx], SPD_MAX
 			ja Err4
 
 		;-----
@@ -308,7 +312,7 @@ getParams:
 			mov rbx, qword[r12 + 24]
 
 			; if (ARGV[3] != '-cl') then Err5
-			cmp dword[rbx], 0x006c632d 	; compare the first 4 bytes to the expected input (in HEX and backwards).
+			cmp dword [rbx], 0x006c632d 	; compare the first 4 bytes to the expected input (in HEX and backwards).
 			jne Err5
 
 		;-----
@@ -343,9 +347,9 @@ getParams:
 			nonary2int rbx, rcx
 
 			; check if value is within range
-			cmp rdx, CLR_MIN
+			cmp dword [rcx], CLR_MIN
 			jb Err6
-			cmp rdx, CLR_MAX
+			cmp dword [rcx], CLR_MAX
 			ja Err6
 
 		;-----
@@ -390,9 +394,9 @@ getParams:
 			nonary2int rbx, r8
 
 			; check if value is within range
-			cmp rdx, SIZ_MIN
+			cmp dword [r8], SIZ_MIN
 			jb Err8
-			cmp rdx, SIZ_MAX
+			cmp dword [r8], SIZ_MAX
 			ja Err8
 
 
@@ -415,7 +419,7 @@ getParams:
 
 		; maintain std call conv
 		pop r12
-
+		pop rbx
 		ret
 
 	; Error 2
@@ -431,6 +435,7 @@ getParams:
 
 		; maintain std call conv
 		pop r12
+		pop rbx
 
 		ret
 
@@ -447,6 +452,7 @@ getParams:
 
 		; maintain std call conv
 		pop r12
+		pop rbx
 
 		ret
 
@@ -463,6 +469,7 @@ getParams:
 
 		; maintain std call conv
 		pop r12
+		pop rbx
 
 		ret
 
@@ -479,6 +486,7 @@ getParams:
 
 		; maintain std call conv
 		pop r12
+		pop rbx
 
 		ret
 
@@ -495,6 +503,7 @@ getParams:
 
 		; maintain std call conv
 		pop r12
+		pop rbx
 
 		ret
 
@@ -511,6 +520,7 @@ getParams:
 
 		; maintain std call conv
 		pop r12
+		pop rbx
 
 		ret
 
@@ -527,6 +537,7 @@ getParams:
 
 		; maintain std call conv
 		pop r12
+		pop rbx
 
 		ret
 
@@ -536,6 +547,7 @@ NoErrs:
 
 ; maintain std call conv
 pop r12
+pop rbx
 
 mov rax, TRUE
 
