@@ -42,7 +42,7 @@
 %macro	nonary2int	2
 
 
-; -----
+	; -----
 	; Algorithm:
 	
 
@@ -238,8 +238,11 @@ getParams:
 
 	;-----
 	; push maintained registers (rbx, r12, r13, r14, r15)
+	push	rbp
+	mov	rbp, rsp
 	push rbx
 	push r12
+	push r14
 
 	;----------
 	; Check that the correct amount of arguements have been entered
@@ -254,6 +257,9 @@ getParams:
 
 	; move ARGV into r12
 	mov r12, rsi
+
+	; move speed addr into r13
+	mov r14, rdx
 
 	;----------
 	; Check for correct argument input
@@ -297,12 +303,12 @@ getParams:
 			mov rbx, qword[r12 + 16] ; +16 for ARGV[2] (2[position in array] * 8[quad size])
 
 			; call nonary2int macro
-			nonary2int rbx, rdx
+			nonary2int rbx, r14
 
 			; check if value is within range
-			cmp dword [rdx], SPD_MIN
+			cmp dword [r14], SPD_MIN
 			jb Err4
-			cmp dword [rdx], SPD_MAX
+			cmp dword [r14], SPD_MAX
 			ja Err4
 
 		;-----
@@ -344,7 +350,9 @@ getParams:
 			mov rbx, qword[r12 + 32] ; +32 for ARGV[4] (4[position in array] * 8[quad size])
 
 			; call nonary2int macro
+			push qword [r14]
 			nonary2int rbx, rcx
+			pop qword [r14]
 
 			; check if value is within range
 			cmp dword [rcx], CLR_MIN
@@ -391,7 +399,9 @@ getParams:
 			mov rbx, qword[r12 + 48] ; +48 for ARGV[6] (6[position in array] * 8[quad size])
 
 			; call nonary2int macro
+			push qword [r14]
 			nonary2int rbx, r8
+			pop qword [r14]
 
 			; check if value is within range
 			cmp dword [r8], SIZ_MIN
@@ -418,8 +428,10 @@ getParams:
 		mov rax, FALSE
 
 		; maintain std call conv
+		pop r14
 		pop r12
 		pop rbx
+		pop rbp
 		ret
 
 	; Error 2
@@ -434,8 +446,10 @@ getParams:
 		mov rax, FALSE
 
 		; maintain std call conv
+		pop r14
 		pop r12
 		pop rbx
+		pop rbp
 
 		ret
 
@@ -451,8 +465,10 @@ getParams:
 		mov rax, FALSE
 
 		; maintain std call conv
+		pop r14
 		pop r12
 		pop rbx
+		pop rbp
 
 		ret
 
@@ -468,8 +484,10 @@ getParams:
 		mov rax, FALSE
 
 		; maintain std call conv
+		pop r14
 		pop r12
 		pop rbx
+		pop rbp
 
 		ret
 
@@ -485,8 +503,10 @@ getParams:
 		mov rax, FALSE
 
 		; maintain std call conv
+		pop r14
 		pop r12
 		pop rbx
+		pop rbp
 
 		ret
 
@@ -502,8 +522,10 @@ getParams:
 		mov rax, FALSE
 
 		; maintain std call conv
+		pop r14
 		pop r12
 		pop rbx
+		pop rbp
 
 		ret
 
@@ -519,8 +541,10 @@ getParams:
 		mov rax, FALSE
 
 		; maintain std call conv
+		pop r14
 		pop r12
 		pop rbx
+		pop rbp
 
 		ret
 
@@ -536,8 +560,10 @@ getParams:
 		mov rax, FALSE
 
 		; maintain std call conv
+		pop r14
 		pop r12
 		pop rbx
+		pop rbp
 
 		ret
 
@@ -546,8 +572,10 @@ getParams:
 NoErrs:
 
 ; maintain std call conv
+pop r14
 pop r12
 pop rbx
+pop rbp
 
 mov rax, TRUE
 
@@ -569,14 +597,24 @@ common	size		1:4			; screen size, dword, integer value
 global drawWheels
 drawWheels:
 
-;	YOUR CODE GOES HERE (save registers)
-
+;-----
+; push maintained registers (rbx, r12, r13, r14, r15)
+push	rbp
+mov	rbp, rsp
+push r12
 
 ; -----
 ;  Set draw speed step
 ;	sStep = speed / scale
 
-;	YOUR CODE GOES HERE
+; speed int to float
+mov r12, 0
+mov r12d, dword[speed]
+cvtsi2sd xmm5, r12
+
+; sStep calculation
+divsd xmm5, qword[scale]
+movsd qword[sStep], xmm5
 
 ; -----
 ;  Prepare for drawing
@@ -592,15 +630,69 @@ drawWheels:
 ;  Set draw color(r,g,b)
 ;	uses glColor3ub(r,g,b)
 
-;	YOUR CODE GOES HERE
+; initialize parameter registers
+mov rdi, 0
+mov rsi, 0
+mov rdx, 0
+
+; get blue color value
+mov dl, byte [color]
+
+;get green color value
+mov ecx, dword [color]
+ror ecx, 8
+mov sil, cl
+
+;get red color value
+mov ecx, dword [color]
+ror ecx, 16
+mov dil, cl
+
+call glColor3ub
 
 ; -----
 ;  main plot loop
 ;	iterate t from 0.0 to 2*pi by tStep
 ;	uses glVertex2d(x,y) for each formula
 
+; 2pi
+movsd xmm2, qword [pi]
+mulsd xmm2, qword [fltTwo]
+movsd qword [fltTwoPiS], xmm2
 
-;	YOUR CODE GOES HERE
+; reset t = 0
+mov qword [t], 0
+
+plotlp:
+
+	; -----
+	; formula 1
+
+	; x = cos (t)
+	movsd xmm0, qword [t]
+	call cos
+	movsd qword [x], xmm0
+
+	; y = sin (t)
+	movsd xmm0, qword [t]
+	call sin
+	movsd qword [y], xmm0
+
+	; call OpenGL
+;	movsd xmm0, qword [x]
+;	movsd xmm1, qword [y]
+;	call glVertex2d
+
+	; t = t + tStep
+	movsd xmm3, qword [t]
+	addsd xmm3, qword [tStep]
+	movsd qword [t], xmm3
+
+; loop condition
+; if (t <= 2pi) then loop
+movsd xmm2, qword [fltTwoPiS]
+ucomisd xmm2, qword [t]
+jge plotlp
 
 
 ; -----
@@ -629,8 +721,10 @@ resetDone:
 
 	call	glutPostRedisplay
 
-; -----
-;	YOUR CODE GOES HERE (restore registers)
+;-----
+; pop maintained registers (rbx, r12, r13, r14, r15)
+pop r12
+pop rbp
 
 	ret
 
