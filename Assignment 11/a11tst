@@ -1,0 +1,613 @@
+#!/bin/bash
+# CS 218
+# Assignment #11 test script.
+#
+# ----------
+#  Initial checks.
+#	Ensure executable file exists.
+#
+if [ -z $1 ]; then
+	echo "Error, must provide executable file name."
+	exit
+fi
+#
+if [ ! -e $1 ] || [ ! -x $1 ]; then
+	echo "Error, unable to find $1 executable file."
+	exit
+fi
+#
+if	[ ! -e a11f1.txt ] ||
+	[ ! -e a11f1MSTR.enc ] ||
+	[ ! -e a11f2.txt ] ||
+	[ ! -e a11f2MSTR.enc ] ||
+	[ ! -e a11f3.txt ] ||
+	[ ! -e a11f3MSTR.enc ] ||
+	[ ! -e null.txt ]; then
+	echo "Error, unable to find test files."
+#	exit
+fi
+#
+# ---------------------------------------------------------
+# Define script variables and function
+#
+bolded=`tput bold`
+normal=`tput sgr0`
+#
+pause() {
+	if [ "$1" = "skip" ]; then
+		echo
+	else
+		echo
+		echo -n "Press return to continue"
+		read
+		clear
+	fi
+}
+#
+# ----------
+# Begin error tests.
+#
+#
+if [ ! "$2" == "ex" ]; then
+#
+# -----
+clear
+echo
+echo "${bolded}CS 218 - Assignment #11 Testing Script${normal}"
+echo
+echo
+echo "Note, this utility assumes the program is working or very"
+echo "      close to working.  Testing on an incomplete"
+echo "      program will not be useful."
+echo
+echo
+echo " Note, You can type cntl-c to terminate an in-process script."
+echo
+echo " Note, when the prompt appears, do NOT enter keys - they are pre-entered."
+echo
+echo " Note, you can type ${bolded} ./a11tst blowfish ex ${normal} which will skip the command"
+echo "       line argument testing and perform only the execution tests."
+echo
+echo " Note, you can type ${bolded} ./a11tst blowfish ex f ${normal} which will perform the"
+echo "       execution tests without waiting for user confirmation."
+echo
+echo
+pause $2
+clear
+# ************************************************************************************
+#  Initial checks for usage message
+#
+echo "------------------------------------"
+echo "Error testing -> usage message"
+echo "     Should show: Usage: blowfish <-en|-de> -if <inputFile> -of <outputFile>"
+echo
+echo
+echo ${bolded}$1${normal}
+./$1
+echo
+#
+echo ${bolded}$1${normal}
+./$1     
+echo
+echo
+echo
+echo
+echo
+echo
+pause $2
+#
+# -----
+#  Check for incomplete command line arguments
+#
+echo "------------------------------------"
+echo "Error testing -> incomplete command line arguments"
+echo "     Should show: Error, command line arguments incomplete."
+echo
+echo
+#
+echo "./"$1" -way to few"
+./$1 -way to few
+#
+echo
+echo "./"$1" -en -if file.txt"
+./$1 -en -if file.txt
+#
+echo
+echo "./"$1" -en -if file.txt -offile.txt"
+./$1 -en -if file.txt
+#
+echo
+echo
+echo
+echo
+echo
+pause $2
+#
+# -----
+#  Check for too many command line arguments
+#
+echo "------------------------------------"
+echo "Error testing -> too many command line arguments"
+echo "     Should show: Error, too many command line arguments."
+echo
+echo
+#
+echo "./"$1" -en - if none txt - of null txt"
+./$1 -en - if none txt - of null txt
+#
+echo
+echo "./"$1" -en -if none.txt -of null.txt -of new.txt"
+./$1 -en -if none.txt -of null.txt -of new.txt
+#
+echo
+echo "./"$1" -en -if none.txt -o f null.txt"
+./$1 -en -if none.txt -o f null.txt
+#
+echo
+echo "./"$1" -en -if none.txt -of null txt"
+./$1 -en -if none.txt -of null txt
+#
+echo
+echo
+echo
+echo
+#
+pause $2
+#
+# -----
+#  Check for encryption/decryption option <-en|-de>
+#
+echo "------------------------------------"
+echo "Error testing -> encryption/decryption flag"
+echo "     Should show: Error, encryption/decryption flag not valid."
+echo
+echo
+#
+echo "./"$1" -ee -if none.txt -of null.txt"
+./$1 -ee -if none.txt -of null.txt
+#
+echo
+echo "./"$1" -dn -if none.txt -of null.txt"
+./$1 -dn -if none.txt -of null.txt
+#
+echo
+echo "./"$1" -dee -if none.txt -of null.txt"
+./$1 -dee -if none.txt -of null.txt
+#
+echo
+echo "./"$1" -enn -if none.txt -of null.txt"
+./$1 -enn -if none.txt -of null.txt
+#
+echo
+echo "./"$1" de -if none.txt -of null.txt"
+./$1 de -if none.txt -of null.txt
+#
+echo
+echo
+pause $2
+#
+# -----
+#  Input file argument checks
+#
+echo "-------------------------------"
+echo "Error Testing -> Input File Specifier -> -if "
+echo "     Should show: Error, invalid read file specifier."
+echo
+echo
+#
+echo "./"$1" -en if none.txt -of null.txt"
+./$1 -en if none.txt -of null.txt
+#
+echo
+echo "./"$1" -en -i none.txt -of null.txt"
+./$1 -en -i none.txt -of null.txt
+#
+echo
+echo "./"$1" -de -f none.txt -of null.txt"
+./$1 -de -f none.txt -of null.txt
+#
+echo
+echo "./"$1" -de -iff none.txt -of null.txt"
+./$1 -de -iff none.txt -of null.txt
+echo
+echo
+echo
+echo
+echo
+pause $2
+#
+# -----
+#  Input file error testing
+#
+echo "-------------------------------"
+echo "Error Testing -> Input File Name -> <inputFileName>"
+echo "     Should show: Error, opening input file."
+echo
+#
+echo
+echo "./"$1" -de -if nonExistant.txt -of null.txt"
+./$1 -de -if nonExistant.txt -of null.txt
+#
+echo
+echo "./"$1" -en -if /dev/null/test -of null.txt"
+./$1 -en -if /dev/null/test -of null.txt
+#
+echo
+echo "./"$1" -de -if noSuchFile.txt -of null.txt"
+./$1 -de -if noSuchFile.txt -of null.txt
+#
+echo
+echo
+echo
+echo
+echo
+echo
+pause $2
+#
+# -----
+#  Tests for output file specifier
+#
+echo "-------------------------------"
+echo "Error Testing -> Output File Specifier -> -of"
+echo "     Should show: Error, invalid write file specifier."
+echo
+echo
+#
+echo "./"$1" -en -if a11f1.txt of null.txt"
+./$1 -en -if a11f1.txt of null.txt
+#
+echo
+echo "./"$1" -en -if a11f1.txt -o null.txt"
+./$1 -en -if a11f1.txt -o null.txt
+#
+echo
+echo "./"$1" -en -if a11f1.txt -f null.txt"
+./$1 -en -if a11f1.txt -f null.txt
+#
+echo
+echo "./"$1" -en -if a11f1.txt -oof null.txt"
+./$1 -en -if a11f1.txt -oof null.txt
+echo
+echo
+echo
+echo
+pause $2
+#
+# -----
+#
+echo "-------------------------------"
+echo "Error Testing -> Output File Name -> -of <fileName>"
+echo "     Should show: Error, opening output file."
+echo
+#
+echo "test file" > nonAccessableFile.txt
+chmod -rw nonAccessableFile.txt
+echo
+echo "./"$1" -en -if a11f1.txt -of nonAccessableFile.txt"
+./$1 -en -if a11f1.txt -of nonAccessableFile.txt
+#
+chmod +rw nonAccessableFile.txt
+rm nonAccessableFile.txt
+#
+echo
+echo "./"$1" -en -if a11f1.txt -of /dev/null/test"
+./$1 -en -if a11f1.txt -of /dev/null/test
+#
+echo
+echo
+echo
+echo
+echo
+pause $2
+#
+fi
+#
+# ***********************************************************************
+# Begin execution tests.
+#
+clear
+echo "-------------------------------"
+echo "${bolded}Execution Tests...${normal}"
+echo "${bolded}Prompts are shown for reference.  Do NOT enter any input.${normal}"
+echo
+#
+echo
+echo "${bolded}Test #1 A -> a11f1.txt (encryption)${normal}"
+echo "key is: cs218 assignment #11"
+#
+echo "./"$1" -en -if a11f1.txt -of a11f1.enc"
+echo
+./$1 -en -if a11f1.txt -of a11f1.enc << EOF
+cs218 assignment #11
+EOF
+#
+echo
+if `diff a11f1.enc a11f1MSTR.enc >/dev/null` ; then
+	echo
+	echo "Test #1 A - Successful"
+else
+	diff a11f1.enc a11f1MSTR.enc
+fi
+#
+echo
+echo
+echo "${bolded}Test #1 B -> a11f1.txt (decryption)${normal}"
+echo "./"$1" -de -if a11f1.enc -of a11f1Original.txt"
+echo "key is: cs218 assignment #11"
+echo
+./$1 -de -if a11f1.enc -of a11f1Original.txt << EOF
+cs218 assignment #11
+EOF
+#
+echo
+if `diff a11f1.txt a11f1Original.txt >/dev/null` ; then
+	echo
+	echo "Test #1 B - Successful"
+else
+	diff a11f1.txt a11f1Original.txt
+fi
+#
+echo
+#
+if [ ! "$2" == "f" ] && [ ! "$3" == "f" ]; then
+	pause $2
+	clear
+fi
+#
+# ----------
+#
+echo "-------------------------------"
+echo "${bolded}Execution Tests...${normal}"
+echo "${bolded}Prompts are shown for reference.  Do NOT enter any input.${normal}"
+echo
+echo
+echo "${bolded}Test #2 A -> a11f2.txt (encryption w/some short invalid keys)${normal}"
+echo "./"$1" -en -if a11f2.txt -of a11f2.enc"
+echo "bad key is: trust no one"
+echo "bad key is: no one"
+echo "bad key is: trust none"
+echo "key in: mulder says trust no one"
+echo
+./$1 -en -if a11f2.txt -of a11f2.enc << EOF
+trust no one
+no one
+trust none
+mulder says trust no one
+EOF
+#
+echo
+#
+if `diff a11f2.enc a11f2MSTR.enc >/dev/null` ; then
+	echo
+	echo "Test #2 A - Successful"
+else
+	diff a11f2.enc a11f2MSTR.enc
+fi
+#
+echo
+#
+if [ ! "$2" == "f" ] && [ ! "$3" == "f" ]; then
+	pause $2
+	clear
+fi
+#
+# ----------
+#
+echo "-------------------------------"
+echo "${bolded}Execution Tests...${normal}"
+echo "${bolded}Prompts are shown for reference.  Do NOT enter any input.${normal}"
+echo
+echo
+echo "${bolded}Test #2 B -> a11f2.txt (decryption w/too long invalid key)${normal}"
+echo "./"$1" -de -if a11f2.enc -of a11f2Original.txt"
+echo "bad key is: trust no one trust no one trust no one trust no one trust no one trust no one trust no one trust no one trust no one trust no one"
+echo "bad key is: trust no one trust no one trust no one trust no one trust no one"
+echo "key in: mulder says trust no one"
+echo
+./$1 -de -if a11f2.enc -of a11f2Original.txt << EOF
+trust no one trust no one trust no one trust no one trust no one trust no one trust no one trust no one trust no one trust no one
+trust no one trust no one trust no one trust no one trust no one
+mulder says trust no one
+EOF
+#
+echo
+if `diff a11f2.txt a11f2Original.txt >/dev/null` ; then
+	echo
+	echo "Test #2 B - Successful"
+else
+	diff a11f2.txt a11f2Original.txt
+fi
+#
+echo
+echo
+#
+if [ ! "$2" == "f" ] && [ ! "$3" == "f" ]; then
+	pause $2
+	clear
+fi
+#
+# ----------
+#
+echo "-------------------------------"
+echo "${bolded}Execution Tests...${normal}"
+echo "${bolded}Prompts are shown for reference.  Do NOT enter any input.${normal}"
+echo
+echo "${bolded}Test #3 A -> a11f3.txt (encryption)${normal}"
+echo "./"$1" -en -if a11f3.txt -of a11f3.enc"
+echo "key is: Fizzing Whizbees"
+echo
+./$1 -en -if a11f3.txt -of a11f3.enc << EOF
+Fizzing Whizbees
+EOF
+#
+echo
+if `diff a11f3.enc a11f3MSTR.enc >/dev/null` ; then
+	echo
+	echo "Test #3 A - Successful"
+else
+	diff a11f3.enc a11f3MSTR.enc
+fi
+#
+echo
+echo
+echo "${bolded}Test #3 B -> a11f3.txt (decryption)${normal}"
+echo "./"$1" -de -if a11f3.enc -of a11f3Original.txt"
+echo "key is: Fizzing Whizbees"
+echo
+./$1 -de -if a11f3.enc -of a11f3Original.txt << EOF
+Fizzing Whizbees
+EOF
+#
+echo
+if `diff a11f3.txt a11f3Original.txt >/dev/null` ; then
+	echo
+	echo "Test #3 B - Successful"
+else
+	diff a11f3.txt a11f3Original.txt
+fi
+#
+echo
+#
+#
+if [ ! "$2" == "f" ] && [ ! "$3" == "f" ]; then
+	pause $2
+	clear
+fi
+#
+# ----------
+#
+echo "-------------------------------"
+echo "${bolded}Execution Tests...${normal}"
+echo "${bolded}Prompts are shown for reference.  Do NOT enter any input.${normal}"
+echo
+echo "${bolded}Test #4 A -> a11f4.txt (encryption)${normal}"
+echo "./"$1" -en -if a11f4.txt -of a11f4.enc"
+echo "key is: Global Thermonuclear War"
+echo
+./$1 -en -if a11f4.txt -of a11f4.enc << EOF
+Global Thermonuclear War
+EOF
+#
+echo
+if `diff a11f4.enc a11f4MSTR.enc >/dev/null` ; then
+	echo
+	echo "Test #4 A - Successful"
+else
+	diff a11f4.enc a11f4MSTR.enc
+fi
+#
+echo
+echo
+echo "${bolded}Test #4 B -> a11f1.txt (decryption)${normal}"
+echo "./"$1" -de -if a11f4.enc -of a11f4Original.txt"
+echo "key is: Global Thermonuclear War"
+echo
+./$1 -de -if a11f4.enc -of a11f4Original.txt << EOF
+Global Thermonuclear War
+EOF
+#
+echo
+#
+if `diff a11f4.txt a11f4Original.txt >/dev/null` ; then
+	echo
+	echo "Test #4 B - Successful"
+else
+	diff a11f4.txt a11f4Original.txt
+fi
+#
+echo
+#
+#
+if [ ! "$2" == "f" ] && [ ! "$3" == "f" ]; then
+	pause $2
+	clear
+fi
+#
+# ----------
+#
+echo "-------------------------------"
+echo "${bolded}Execution Tests...${normal}"
+echo "${bolded}Prompts are shown for reference.  Do NOT enter any input.${normal}"
+echo "Large file -> may be very slow..."
+echo
+echo "${bolded}Test #5 A -> random.txt (encryption)${normal}"
+echo "./"$1" -en -if random.txt -of random.enc"
+echo "key is: Friend and Mellon"
+echo
+./$1 -en -if random.txt -of random.enc << EOF
+Friend and Mellon
+EOF
+#
+echo
+if `diff random.enc a11f5MSTR.enc >/dev/null` ; then
+	echo
+	echo "Test #5 A - Successful"
+else
+	diff random.enc a11f5MSTR.enc
+fi
+#
+echo
+echo
+echo "${bolded}Test #5 B -> a11f5.txt (decryption)${normal}"
+echo "./"$1" -de -if random.enc -of a11f5Original.txt"
+echo "key is: Friend and Mellon"
+echo
+./$1 -de -if random.enc -of a11f5Original.txt << EOF
+Friend and Mellon
+EOF
+#
+echo
+if `diff random.txt a11f5Original.txt >/dev/null` ; then
+	echo
+	echo "Test #5 B - Successful"
+else
+	diff random.txt a11f5Original.txt
+fi
+#
+echo
+#
+if [ ! "$2" == "f" ] && [ ! "$3" == "f" ]; then
+	pause $2
+	clear
+fi
+#
+# ----------
+#
+echo "-------------------------------"
+echo "${bolded}Execution Tests...${normal}"
+echo "${bolded}Prompts are shown for reference.  Do NOT enter any input.${normal}"
+echo
+echo "${bolded}Test Empty File -> null.txt (encryption)${normal}"
+echo "./"$1" -en -if null.txt -of temp.enc"
+echo "key is: Fizzing Whizbees"
+echo
+./$1 -en -if null.txt -of temp.enc << EOF
+Fizzing Whizbees
+EOF
+#
+echo
+if `diff null.txt temp.enc >/dev/null` ; then
+	echo
+	echo "Test #6 A - Successful"
+else
+	diff null.txt temp.enc
+fi
+#
+echo "${bolded}Test Empty File -> null.txt (encryption)${normal}"
+echo "./"$1" -de -if null.txt -of temp.dec"
+echo "key is: Fizzing Whizbees"
+echo
+./$1 -de -if null.txt -of temp.dec << EOF
+Fizzing Whizbees
+EOF
+#
+echo
+if `diff null.txt temp.dec >/dev/null` ; then
+	echo
+	echo "Test #6 B - Successful"
+else
+	diff null.txt temp.dec
+fi
+#
+echo
+

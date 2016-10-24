@@ -1,0 +1,306 @@
+Principles of Constitutional Construction
+
+Constitutional interpretation, or constitutional construction, the term more
+often used by the Founders, is the process by which meanings are assigned to
+words in a constitution, to enable legal decisions to be made that are justified
+by it. Some scholars distinguish between "interpretation" â€” assigning meanings
+based on the meanings in other usages of the terms by those the writers and
+their readers had probably read, and "construction" â€” inferring the meaning from
+a broader set of evidence, such as the structure of the complete document from
+which one can discern the function of various parts, discussion by the drafters
+or ratifiers during debate leading to adoption ("legislative history"), the
+background of controversies in which the terms were used that indicate the
+concerns and expectations of the drafters and ratifiers, alternative wordings
+and their meanings accepted or rejected at different points in development, and
+indications of meanings that can be inferred from what is not said, among other
+methods of analysis.
+
+There is also a question of whether the meanings should be taken from the public
+meanings shared among the literate populace, the private meanings used among the
+drafters and ratifiers that might not have been widely shared, or the public
+legal meanings of terms that were best known by more advanced legal scholars of
+the time. Most of the U.S. Constitution appears to have been written to be
+understood by ordinary people of that era, although people then were much more
+literate in the law than people are now. However, many of its words and phrases
+are fairly deep legal terms that were only well understood by a few of the
+legally educated Founders, even though the general population probably had a
+rudimentary understanding of them.
+
+There is a problem with the "original public meaning" formulation, because while the meanings of constitutional terms were "public" in the sense that they were not "private" or "secret", they were not necessarily familiar to ordinary people of the era. More accurate would be "legally educated and still learning public meaning", because many of the Founders themselves used terms that they had to research to find the meanings of. An example of this can be seen in the comments by Dickenson in the Federal Convention Aug. 29, 1787, about ex post facto only applying to criminal cases, after researching the topic in Blackstone's Commentaries. So since we can presume the Founders mostly agreed on the writers they considered authoritative on legal usages, we can reasonably refer to the writings of those other writers to find the meanings the Founders intended even if the Founders themselves had not yet done the research to fully master the concepts.
+
+For constitutional terms the denotata are not empirical objects so much as ideas, that is, mental models, that do not, for the most part, have the advantage of some formal scientific models of being representable in mathematical or computer formalisms that we can examine externally. In particular, they are ideas that existed in the minds of persons long dead, so we have to develop mental models of their mental models ("theory of mind") based on the things they read and wrote. That can be done. The verification comes with being able to predict what one of them will say in a writing one hasn't read yet. Becoming adept at doing so can reassure one that one has "gotten into their heads". But that is not something one can demonstrate to others.
+
+This leads to the admonition that the English used in the Constitution and other
+legal documents of the 18th century should be read as a foreign language,
+putting aside today's meanings of what seem to be the same words we use today,
+and attempting to decode the meanings from various clues we can find. This is
+not only wise for 18th century English, but for almost any communications, even
+among people who communicate with one another daily, because no two people mean
+precisely the same thing by the same words on every occasion. When both speaker
+and listener are alive they are able to interrogate one another to arrive at a
+common meaning, but when the author is dead we have to find evidence in other
+things he or his correspondents wrote.
+
+Constitutional controversies are about whether an official act is consistent with, and authorized by, a constitution or constitutional statute or court decision. Since a constitution is a law, and the supreme law within its domain, and authorizes statutes and other official acts which have a textual expression, the principles of constitutional interpretation are essentially the same as the principles of statutory or judicial interpretation.
+
+Most legal scholars recognize seven main methods of judicial decisionmaking:
+textual, historical, functional, doctrinal, prudential, equitable,
+and natural, although they may differ on what each includes, and
+there is some overlap among them.
+
+   1. Textual. Decision based on the actual words of the written
+     law, if the meaning of the words is unambiguous. Since a law is
+     a command, then it must mean what it meant to the lawgiver,
+     and if the meaning of the words used in it have changed since it
+     was issued, then textual analysis must be of the words as
+     understood by the lawgiver, which for a constitution would be
+     the understanding of the ratifying convention or, if that is
+     unclear, of the drafters. Some Latin maxims: A verbis legis
+     non est recedendum. From the words of the law there is not
+     any departure. 5 Coke 118. Noscitur ï¿½sociis. Meaning of
+     words may be ascertained by associated words. 3 T.R. 87.
+
+   2. Historical. Decision based less on the actual words than on
+     the understanding revealed by analysis of the history of the
+     drafting and ratification of the law, for constitutions and
+     statutes, sometimes called its legislative history, and for judicial
+     edicts, the case history. A textual analysis for words whose
+     meanings have changed therefore overlaps historical analysis.
+     It arises out of such Latin maxims as Animus hominis est
+     anima scripti. Intention is the soul of an instrument. 3 Bulst.
+     67.
+
+   3. Functional. Also called structural. Decision based on
+     analysis of the structures the law constituted and how they are
+     apparently intended to function as a coherent, harmonious
+     system. A Latin maxim is Nemo aliquam partem recte
+     intelligere potest antequam totum perlegit. No one can
+     properly understand a part until he has read the whole. 3 Coke
+     Rep. 59.
+
+   4. Doctrinal. Decision based on prevailing practices or opinions
+     of legal professionals, mainly legislative, executive, or judicial
+     precedents, according to the meta-doctrine of stare decisis,
+     which treats the principles according to which court decisions
+     have been made as not merely advisory but as normative.
+     Some Latin maxims are: Argumentum ï¿½simili valet in lege.
+     An argument from a like case avails in law. Coke, Littleton,
+     191. Consuetudo et communis assuetudo ... interpretatur
+     legem scriptam, si lex sit generalis. Custom and common
+     usage ... interpret the written law, if it be general. Jenk. Cent.
+     273. Cursus curiï¿½est lex curiï¿½ The practice of the court is
+     the law of the court. 3 Buls. 53. Judiciis posterioribus fides
+     est adhibenda. Credit is to be given to the latest decisions. 13
+     Coke 14. Res judicata pro veritate accipitur. A thing
+     adjudicated is received as true. Coke, Littleton, 103.
+
+   5. Prudential. Decision based on factors external to the law or
+     interests of the parties in the case, such as the convenience of
+     overburdened officials, efficiency of governmental operations,
+     avoidance of stimulating more cases, or response to political
+     pressure. One such consideration, avoidance of disturbing a
+     stable body of practices, is also the main motivation for the
+     doctrinal method. It also includes such considerations as
+     whether a case is "ripe" for decision, or whether lesser or
+     administrative remedies have first been exhausted. A Latin
+     maxim is Boni judicis est lites dirimere. The duty of a good
+     judge is to prevent litigation. 4 Coke 15.
+
+   6. Equitable. Also called ethical. Decision based on an innate
+     sense of justice, balancing the interests of the parties, and what
+     is right and wrong, regardless of what the written law might
+     provide. Often resorted to in cases in which the facts were not
+     adequately anticipated or provided for by the lawgivers. Some
+     scholars put various balancing tests of interests and values in
+     the prudential category, but it works better to distinguish
+     between prudential as balancing the interests and values of
+     the legal system from equitable as balancing the interests and
+     values of the parties. It arises out of the Latin maxim, ï¿½uitas
+     est perfecta quï¿½am ratio quï¿½jus scriptum interpretatur
+     et emendat; nulla scriptura comprehensa, sed sola ratione
+     consistens. Equity is a sort of perfect reason which interprets
+     and amends written law; comprehended in no code, but
+     consistent with reason alone. Coke, Littleton, 24.
+
+   7. Natural. Decision based on what is required or advised by
+     the laws of nature, or perhaps of human nature, and on what is
+     physically or economically possible or practical, or on what is
+     actually likely to occur. This has its origin in such ancient Latin
+     maxims as: Jura naturï¿½sunt immutabilia. The laws of
+     nature are unchangeable. Jacob. 63. Impossibilium nulla
+     obligatio est. There is no obligation to do impossible things.
+     D. 50, 17, 185. Lex non cogit ad impossibilia. The law does
+     not compel the impossible. Hob. 96. Lex neminem cogit ad
+     vana seu inutilia peragenda. The law requires no one to do
+     vain or useless things. 5 Coke 21. Legibus sumptis
+     desinentibus, lege naturï¿½utendum est. Laws of the state
+     failing, we must act by the law of nature. 2 Rol. Rep. 98. 
+
+Of these, only the first three, textual, historical, and functional, are methods
+of interpreting or constructing the written constitution of government, and the
+historical and functional methods may be more a matter of construction than
+interpretation. The last, natural, is construction (not interpretation) of the
+unwritten constitution of nature, or the unwritten constitution of society,
+which form a hierarchy of authority, with the constitution of nature superior to
+the constitution of society, and the constitution of society superior to the
+written constitution of government. The doctrinal, prudential, and equitable
+methods are not interpretion or construction of any of these constitutions,
+although judges often claim they are. There is an misguided tendency among
+modern judges to misrepresent what are essentially prudential or equitable
+decisions as constitutional constructions. Too many lawyers are complicit in
+this by casting what are essentially prudential or equitable arguments into
+constitutional terms. There is nothing inherently wrong with making prudential
+or equitable decisions. The U.S. Constitution confers both law and equity
+jurisdictions on federal courts, as do the state constitutions. The problem
+comes with treating such decisions as establishing precedents, especially
+binding ones. It is one thing to treat a decision as a precedent that clarifies
+some ambiguity in the constitution, but quite another to essentially insert a
+prudential or equitable decision into the constitution as a kind of amendment.
+Such decisions must not conflict with constitutions or constitutional statutes,
+but often do. Doctrinal and prudential decisions are more troublesome. The
+doctrinal method may be compatible with the written constitution of government
+if it merely involves clarifications of ambiguities in the original text, but
+not when those doctrines depart from original legal understanding, as they
+sometimes do.[1] The prudential method may be justifiable as necessary to handle
+large caseloads, but often neglect to render justice in particular cases,
+especially when they involve avoidance of controversy rather than a desire to
+settle all issues brought before the court.
+
+Within these methods, we can, by study of the writings of the
+Founders, and the writings they read, elicit such principles for
+interpreting or constructing the Constitution for the United States as the following:
+
+   1. The Constitution is the written document. Although it may
+     be considered to include the understandings of its words as of
+     the time of ratification, it does not include the subsequent body
+     of practices or precedents upon which constitutional decisions
+     might be based, which may or may not be consistent with it, or
+     authorized by it. The written document refers to itself as "this
+     Constitution", and provides for only four methods by which it
+     may be amended, all of which apply only to the written
+     document.
+
+   2. The authority for provisions of the Constitution is the
+     ratifications and state admissions. Current consent or
+     acquiescence, or lack thereof, to the Constitution or any
+     practice, does not affect the original constitutive acts, and has
+     no authority, unless expressed through adoption of
+     amendments as provided in Article V.
+
+   3. Provisions of the Constitution are mutually consistent.
+     There are no internal logical contradictions, except that a 
+     provision of an amendment inconsistent with a previous 
+     provision supersedes that provision.
+
+   4. None of the words are without force and effect, except those 
+     superseded by amendments, unless such amendments are repealed. 
+     Except for the statement of purpose in the preamble, every word was
+     intended by the Framers to be legally normative, and not just
+     advisory, declaratory, aspirational, or exhortatory. Verba intelligi 
+     ut aliquid operantur debent. Words should be interpreted to give 
+     them some effect.
+
+   5. Rights and powers are complementary. Every right
+     recognized by the Constitution is an immunity, that is, a right
+     against a positive action by government, and is equivalent to a
+     restriction on delegated powers. Conversely, every delegated
+     power is a restriction on immunities. An immunity may be
+     expressed either as a declaration of the right, or as a restriction
+     on powers.
+
+   6. There are no redundancies within the original
+     unamended Constitution. However, amendments may be
+     alternative ways of expressing equivalent content in the original
+     unamended Constitution or previous amendments. More
+     specifically, the Bill of Rights added no new content not
+     implicit in the original unamended Constitution, except the
+     twenty dollar rule of the Seventh Amendment.
+
+   7. The Constitution was intended to define a functionally
+     complete and harmonious system. That does not mean,
+     however, that all powers anyone might think the nation or any
+     branch, level, office or department should have, were actually
+     delegated.
+
+   8. Original "intent" is functional, not motivational. The
+     private motives of the Framers or Founders are irrelevant and
+     largely unknowable, and likely to have been diverse. The
+     common law rule of interpretation understood by the Founders
+     was to discern the functional role of elements of the law, not
+     the private purposes of the lawgivers.
+
+   9. The ratification debates are the best evidence of
+     original understanding. The arguments of those opposed to
+     ratification are not just the positions of the losers in the
+     debates, which some might dismiss as not indicative of original
+     understanding. As the debates proceeded, understandings
+     evolved and clarified, and positions changed. Most opponents
+     were satisfied by adoption of a Bill of Rights, and by
+     assurances by the proponents concerning how the words of
+     the Constitution would be interpreted, and those assurances
+     must be considered part of the original understanding. That
+     means that a construction to which the more significant
+     "anti-federalists" would object is almost certainly incorrect.
+
+  10. Powers are narrow, rights broad. The entire theme and
+     tenor of the ratification debates was that delegated powers
+     were to be interpreted as strictly as possible, consistent with
+     the words, and rights as broadly as possible, with the
+     presumption in favor of the right, and the burden of proof on
+     those claiming a power. Potestas stricte interpretatur. A
+     power is strictly interpreted. In dubiis, non prï¿½umitur pro
+     potentia. In cases of doubt, the presumption is not in favor of
+     a power.
+
+  11. Delegated powers cannot be subdelegated. The U.S.
+     Constitution vests all legislative powers in Congress, and all
+     judicial powers in the Supreme Court and inferior courts,
+     except as specifically expressed. Executive branch officials
+     may subdelegate but must remain responsible for the actions of
+     their subordinates. There can be no authority exercised that is
+     not accountable through constitutional officials.Delegata
+     potestas non potest delegari. A delegated power cannot be
+     delegated. 9 Inst. 597.
+
+  12. The power to regulate is not the power to prohibit all
+     modalities of something. It is only the power to issue
+     prescriptions to "make regular", enforceable only by
+     deprivations of property or privileges, not of life, limb, or
+     liberty. There must always be some modality that is not
+     prohibited.
+
+  13. Implied powers are only to "carry into Execution" an
+     expressed power and not to do whatever is necessary to
+     achieve the intent for which a power might be exercised.
+     Delegation of a power is delegation of the right to make a
+     certain kind of effort, not to do whatever is necessary to get a
+     desired outcome.
+
+  14. There can be no common law crimes. They are in conflict
+     with the prohibitions on ex post facto laws and bills of
+     attainder.
+
+  15. Rights may not be disabled or unduly burdened by
+     legislative or executive process. "Due" process is judicial
+     only, involving the granting of a petition to disable a right of the
+     defendant, with the burden of proof on the plaintiff or
+     prosecutor, and with the defendant having at least those
+     minimum protections that prevailed during the Founding. with
+     similar disablements having similar standards of proof and
+     protection.
+
+  16. There is no right without a remedy. Ubi jus ibi
+     remedium. There must always be an accessible forum in
+     which a complainant has oyer and terminer for any petition. 
+
+  17.  The Founders were learning. "Original meaning" is not just about what the Founders consciously meant at the moment of ratification, but includes what they would discover with further study of the legal tradition they invoked in the words they chose. Thus, they referred to authors like Blackstone and Coke when they were unsure what they meant, and so must we.
+
+  18.  Early practice indicative but not dispositive. Early practice by the Founders may provide evidence of their aspirations in the words they chose, but should not be regarded as perfect expressions of their intent. Practice can represent compromise with practical concerns and may lag behind the ideals contained in the words.
+
+  19.Â Mental models of mental models. Each of us has a mental model of the world that includes a model of the mental models others have of the world. Communication is possible only to the extent that our mental models of the mental models of others are somehow accurate or congruent. When a lawgiver issues a law, a command to others for future compliance, he is relying on others to understand his words the way he does, and those others are relying on him to use words with the meanings they have for them. But words are an imperfect way to convey meanings, and if the recipient of the command cannot interrogate the lawgiver for his meaning, he must try to improve his mental model of the lawgiver's mental model by such means as learning to accurately predict what the lawgiver will write about matters the recipient has not previously read.
+
+  20.Â Find the right level of abstraction. It was common for the Founders to use somewhat more concrete words to mean broader principles. Thus, "press" or "arms" is not limited to the technology of the time, but refers to the general function they served. "Militia" does not mean merely those legally obliged to respond to an official call-up, but defense activity generally.
+
+A more complete discussion of these principles is best done by
+reference to Landmark Court Decisions.
+

@@ -184,6 +184,7 @@ fltThree	dq	3.0
 fltFour		dq	4.0
 fltSix		dq	6.0
 fltTwoPiS	dq	0.0
+fltTwoPi 	dq	6.24318530716
 
 pi		dq	3.14159265358
 
@@ -599,9 +600,11 @@ drawWheels:
 
 ;-----
 ; push maintained registers (rbx, r12, r13, r14, r15)
-push	rbp
-mov	rbp, rsp
+push rbx
 push r12
+push r13
+push r14
+push r15
 
 ; -----
 ;  Set draw speed step
@@ -656,32 +659,386 @@ call glColor3ub
 ;	uses glVertex2d(x,y) for each formula
 
 ; 2pi
-movsd xmm2, qword [pi]
-mulsd xmm2, qword [fltTwo]
-movsd qword [fltTwoPiS], xmm2
+;movsd xmm2, qword [pi]
+;mulsd xmm2, qword [fltTwo]
+;movsd qword [fltTwoPiS], xmm2
 
 ; reset t = 0
 mov qword [t], 0
+
+;mov rcx, 1000
 
 plotlp:
 
 	; -----
 	; formula 1
 
-	; x = cos (t)
-	movsd xmm0, qword [t]
-	call cos
-	movsd qword [x], xmm0
+		; x = cos (t)
+			movsd xmm0, qword [t]
+			call cos
+			movsd qword [x], xmm0
 
-	; y = sin (t)
-	movsd xmm0, qword [t]
-	call sin
-	movsd qword [y], xmm0
+		; y = sin (t)
+			movsd xmm0, qword [t]
+			call sin
+			movsd qword [y], xmm0
 
-	; call OpenGL
-;	movsd xmm0, qword [x]
-;	movsd xmm1, qword [y]
-;	call glVertex2d
+		; call OpenGL
+		movsd xmm0, qword [x]
+		movsd xmm1, qword [y]
+		
+		call glVertex2d
+
+	; -----
+	; formula 2
+
+		; x = [cos(t) / 3] + [2cos(2pis) / 3]
+		
+			; cos(t)
+			movsd xmm0, qword [t]
+			call cos
+			
+			; cos(t) / 3
+			divsd xmm0, qword[fltThree]
+
+			; save in tmp1
+			movsd qword[fltTmp1], xmm0
+
+			; cos(2pis)
+			movsd xmm4, qword [fltTwoPi]
+			mulsd xmm4, qword [s]
+			movsd qword [fltTwoPiS], xmm4
+			movsd xmm0, qword [fltTwoPiS]
+			call cos
+
+			; 2 * cos(2pis)
+			mulsd xmm0, qword [fltTwo]
+			; 2 * cos(2pis) / 3
+			divsd xmm0, qword [fltThree]
+
+			addsd xmm0, qword [fltTmp1]
+			movsd qword [x], xmm0
+
+		; y = [sin(t) / 3] + [2sin(2pis) / 3]
+
+			; sin(t)
+			movsd xmm0, qword [t]
+			call sin
+			
+			; sin(t) / 3
+			divsd xmm0, qword[fltThree]
+
+			; save in tmp1
+			movsd qword[fltTmp1], xmm0
+
+			; sin(2pis)
+			movsd xmm0, qword [fltTwoPiS]
+			call sin
+
+			; 2 * sin(2pis)
+			mulsd xmm0, qword [fltTwo]
+
+			; 2 * sin(2pis) / 3
+			divsd xmm0, qword [fltThree]
+
+			addsd xmm0, qword [fltTmp1]
+			movsd qword [y], xmm0
+
+		; call OpenGL
+		movsd xmm0, qword [x]
+		movsd xmm1, qword [y]
+		
+		call glVertex2d
+
+	; -----
+	; formula 3
+
+		; x = [2cos(2piS) / 3] + [t cos(4piS + [2pi / 3]) / 6pi]
+
+			; cos(2pis)
+			movsd xmm0, qword [fltTwoPiS]
+			call cos
+
+			; 2 * cos(2pis)
+			mulsd xmm0, qword [fltTwo]
+			; 2 * cos(2pis) / 3
+			divsd xmm0, qword [fltThree]
+
+			; save in tmp1
+			movsd qword[fltTmp1], xmm0
+
+			; ---
+			; t cos(4piS + [2pi / 3]) \ 6pi
+
+			; 4 *  pi * s
+			movsd xmm0, qword [pi]
+			mulsd xmm0, qword [fltFour]
+			mulsd xmm0, qword [s]
+
+			; 2pi / 3
+			movsd xmm1, qword [fltTwoPi]
+			divsd xmm1, qword [fltThree]
+
+			; cos(4piS + [2pi / 3])
+			addsd xmm0, xmm1
+			call cos
+
+			; t * cos
+			mulsd xmm0, qword [t]
+
+			; 6 * pi
+			movsd xmm4, qword [pi]
+			mulsd xmm4, qword [fltSix]
+
+			; top / bottom
+			divsd xmm0, xmm4
+
+			; perfrom addition
+
+			addsd xmm0, qword[fltTmp1]
+			movsd qword [x], xmm0
+
+		; y = [2sin(2piS) / 3] - [t sin(4piS + [2pi / 3]) / 6pi]
+
+			; sin(2pis)
+			movsd xmm0, qword [fltTwoPiS]
+			call sin
+
+			; 2 * sin(2pis)
+			mulsd xmm0, qword [fltTwo]
+
+			; 2 * sin(2pis) / 3
+			divsd xmm0, qword [fltThree]
+
+			; save in tmp1
+			movsd qword[fltTmp1], xmm0
+
+
+			; ---
+			; t sin(4piS + [2pi / 3]) \ 6pi
+
+			; 4 *  pi * s
+			movsd xmm0, qword [pi]
+			mulsd xmm0, qword [fltFour]
+			mulsd xmm0, qword [s]
+
+			; 2pi / 3
+			movsd xmm1, qword [fltTwoPi]
+			divsd xmm1, qword [fltThree]
+
+			; sin(4piS + [2pi / 3])
+			addsd xmm0, xmm1
+			call sin
+
+			; t * sin
+			mulsd xmm0, qword [t]
+
+			; 6 * pi
+			movsd xmm4, qword [pi]
+			mulsd xmm4, qword [fltSix]
+
+			; top / bottom
+			divsd xmm0, xmm4
+
+			; perfrom subtraction
+			movsd xmm1, qword[fltTmp1]
+			subsd xmm1, xmm0
+			movsd qword [y], xmm1
+
+		; call OpenGL
+		movsd xmm0, qword [x]
+		movsd xmm1, qword [y]
+		
+		call glVertex2d
+
+	; -----
+	; formula 4
+
+		; x
+
+			; cos(2pis)
+			movsd xmm0, qword [fltTwoPiS]
+			call cos
+
+			; 2 * cos(2pis)
+			mulsd xmm0, qword [fltTwo]
+			; 2 * cos(2pis) / 3
+			divsd xmm0, qword [fltThree]
+
+			; save in tmp1
+			movsd qword[fltTmp1], xmm0
+
+			; ---
+			; t cos(4piS + [2pi / 3]) \ 6pi
+
+			; 4 *  pi * s
+			movsd xmm0, qword [pi]
+			mulsd xmm0, qword [fltFour]
+			mulsd xmm0, qword [s]
+
+			call cos
+
+			; t * cos
+			mulsd xmm0, qword [t]
+
+			; 6 * pi
+			movsd xmm4, qword [pi]
+			mulsd xmm4, qword [fltSix]
+
+			; top / bottom
+			divsd xmm0, xmm4
+
+			; perfrom addition
+
+			addsd xmm0, qword[fltTmp1]
+			movsd qword [x], xmm0
+
+		; y
+
+			; sin(2pis)
+			movsd xmm0, qword [fltTwoPiS]
+			call sin
+
+			; 2 * sin(2pis)
+			mulsd xmm0, qword [fltTwo]
+
+			; 2 * sin(2pis) / 3
+			divsd xmm0, qword [fltThree]
+
+			; save in tmp1
+			movsd qword[fltTmp1], xmm0
+
+			; ---
+			; t sin(4piS) \ 6pi
+
+			; 4 *  pi * s
+			movsd xmm0, qword [pi]
+			mulsd xmm0, qword [fltFour]
+			mulsd xmm0, qword [s]
+
+			call sin
+
+			; t * sin
+			mulsd xmm0, qword [t]
+
+			; 6 * pi
+			movsd xmm4, qword [pi]
+			mulsd xmm4, qword [fltSix]
+
+			; top / bottom
+			divsd xmm0, xmm4
+
+			; perfrom subtraction
+			movsd xmm1, qword[fltTmp1]
+			subsd xmm1, xmm0
+			movsd qword [y], xmm1
+
+		; call OpenGL
+		movsd xmm0, qword [x]
+		movsd xmm1, qword [y]
+		
+		call glVertex2d
+
+	; -----
+	; Formula 5
+
+		; x = [2cos(2piS) / 3] + [t cos(4piS - [2pi / 3]) / 6pi]
+
+			; cos(2pis)
+			movsd xmm0, qword [fltTwoPiS]
+			call cos
+
+			; 2 * cos(2pis)
+			mulsd xmm0, qword [fltTwo]
+			; 2 * cos(2pis) / 3
+			divsd xmm0, qword [fltThree]
+
+			; save in tmp1
+			movsd qword[fltTmp1], xmm0
+
+			; ---
+			; t cos(4piS - [2pi / 3]) \ 6pi
+
+			; 4 *  pi * s
+			movsd xmm0, qword [pi]
+			mulsd xmm0, qword [fltFour]
+			mulsd xmm0, qword [s]
+
+			; 2pi / 3
+			movsd xmm1, qword [fltTwoPi]
+			divsd xmm1, qword [fltThree]
+
+			; cos(4piS - [2pi / 3])
+			subsd xmm0, xmm1
+			call cos
+
+			; t * cos
+			mulsd xmm0, qword [t]
+
+			; 6 * pi
+			movsd xmm4, qword [pi]
+			mulsd xmm4, qword [fltSix]
+
+			; top / bottom
+			divsd xmm0, xmm4
+
+			; perfrom addition
+
+			addsd xmm0, qword[fltTmp1]
+			movsd qword [x], xmm0
+
+		; y
+
+			; sin(2pis)
+			movsd xmm0, qword [fltTwoPiS]
+			call sin
+
+			; 2 * sin(2pis)
+			mulsd xmm0, qword [fltTwo]
+
+			; 2 * sin(2pis) / 3
+			divsd xmm0, qword [fltThree]
+
+			; save in tmp1
+			movsd qword[fltTmp1], xmm0
+
+			; ---
+			; t sin(4piS - [2pi / 3]) \ 6pi
+
+			; 4 *  pi * s
+			movsd xmm0, qword [pi]
+			mulsd xmm0, qword [fltFour]
+			mulsd xmm0, qword [s]
+
+			; 2pi / 3
+			movsd xmm1, qword [fltTwoPi]
+			divsd xmm1, qword [fltThree]
+
+			; sin(4piS - [2pi / 3])
+			subsd xmm0, xmm1
+			call sin
+
+			; t * sin
+			mulsd xmm0, qword [t]
+
+			; 6 * pi
+			movsd xmm4, qword [pi]
+			mulsd xmm4, qword [fltSix]
+
+			; top / bottom
+			divsd xmm0, xmm4
+
+			; perfrom subtraction
+			movsd xmm1, qword[fltTmp1]
+			subsd xmm1, xmm0
+			movsd qword [y], xmm1
+
+		; call OpenGL
+		movsd xmm0, qword [x]
+		movsd xmm1, qword [y]
+		
+		call glVertex2d
+
 
 	; t = t + tStep
 	movsd xmm3, qword [t]
@@ -690,9 +1047,11 @@ plotlp:
 
 ; loop condition
 ; if (t <= 2pi) then loop
-movsd xmm2, qword [fltTwoPiS]
+movsd xmm2, qword [pi]
+mulsd xmm2, qword [fltTwo]
+;movsd xmm2, qword [fltTwoPi]
 ucomisd xmm2, qword [t]
-jge plotlp
+jae plotlp
 
 
 ; -----
@@ -723,8 +1082,11 @@ resetDone:
 
 ;-----
 ; pop maintained registers (rbx, r12, r13, r14, r15)
+pop r15
+pop r14
+pop r13
 pop r12
-pop rbp
+pop rbx
 
 	ret
 
