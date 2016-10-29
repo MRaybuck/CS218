@@ -1,3 +1,4 @@
+;  Matt Raybuck
 ;  CS 218 - Assignment #11
 ;  Functions Template
 
@@ -77,7 +78,7 @@ errWriteFile	db	"Error, opening output file.", LF, NULL
 ; -----
 ;  Variables for getX() function.
 
-buffMax		dq	BUFF_SIZE
+buffMax		dq	BUFF_SIZE - 1
 curr		dq	BUFF_SIZE
 wasEOF		db	FALSE
 
@@ -180,7 +181,7 @@ getOptions:
 			; get address of ARGV[1]
 			mov rbx, qword[r12 + 8] 	; +8 because ARGV is an array of addresses. addresses are always quad sized
 
-			; if (ARGV[1] != '-en') then Err3
+			; if (ARGV[1] != '-en' or '-de') then Err3
 			cmp dword[rbx], 0x006e652d 	; compare the first 4 bytes to the expected input (in HEX and backwards).
 			je EnFound
 
@@ -238,7 +239,7 @@ getOptions:
 			cmp rax, 0
 			jl Err7
 
-			mov qword[r15], rax
+			mov qword[r15], rax 	; mov write file descriptor value into r15
 
 	; No Errors Found.
 	jmp NoErrs
@@ -427,8 +428,8 @@ ret
 
 ; -----
 ;   Arguments:
-;	value of read file descriptor
-;	address of X array
+;	value of read file descriptor 	in rdi
+;	address of X array 				in rsi
 ;  Returns:
 ;	TRUE or FALSE
 
@@ -443,10 +444,157 @@ ret
 ;  The read buffer itself and some misc. variables are used
 ;  ONLY by this routine and as such are not passed.
 
+; buffMax		dq	BUFF_SIZE - 1
+; curr			dq	BUFF_SIZE
+; wasEOF		db	FALSE
+
+; errRead		db	"Error, reading from file.", LF,
+;				db	"Program terminated.", LF, NULL
+
+; buffer		resb	BUFF_SIZE
+
+; actualRd = rax
+; requestRd = buffer
+
 global getX
 getX:
 
+; push all preserved registers
+push rbx
+push r12
+push r13
+push r14
+push r15
 
+; move arguments into preserved registers
+mov r13, rdi 	; value of read file descriptor
+mov r12, rsi 	; address of X array
+
+; i = 0
+mov rbx, 0
+
+; xArr[] = NULL 
+mov qword [r12], 0
+
+; Get next character from buffer
+getNxtChr:
+
+; if (curr > bfmax)
+mov rcx, qword [buffMax]
+cmp qword [curr], rcx
+jle DoneRd
+
+	; if (wasEOF) then exit with FALSE
+	cmp byte [wasEOF], TRUE
+	jne NotEOF
+
+		; maintain std call conv
+		pop r15
+		pop r14
+		pop r13
+		pop r12
+		pop rbx
+
+		; rax = TRUE
+		mov rax, FALSE
+
+		ret
+
+	NotEOF:
+
+	
+	;  Call OS to read characters from input file.
+
+	mov	rax, SYS_read		; system code for read()
+	mov	rsi, buffer			; address of buffer to read into
+	mov	rdi, r13			; file descriptor for read file
+	mov rdx, BUFF_SIZE		; rdx = BUFF_SIZE to read into buffer
+	syscall					; system call
+
+	; set buffMax = BUFF_SIZE (will be changed to actualRd if necessary)
+	mov qword [buffMax], BUFF_SIZE
+
+	; if (rax < 0) then display error and exit with FALSE
+	cmp rax, 0
+	jge NoErr
+
+		; print error
+		mov rdi, errRead ; set argument for passing
+		call printString
+		
+		; return FALSE to main
+		mov rax, FALSE
+
+		; maintain std call conv
+		pop r15
+		pop r14
+		pop r13
+		pop r12
+		pop rbx
+
+		ret		
+
+	NoErr:
+
+	; if (actualRd == 0) then exit with FALSE
+	cmp rax, 0
+	jg ChrsRemain
+
+		; return FALSE to main
+		mov rax, FALSE
+
+		; maintain std call conv
+		pop r15
+		pop r14
+		pop r13
+		pop r12
+		pop rbx
+
+		ret	
+
+	ChrsRemain:
+
+	; if (actualRd < requestedRd) then wasEOF = TRUE and buffMax = ActualRd
+	cmp rax, BUFF_SIZE
+	jge RequestedWasRd
+
+		mov byte [wasEOF], TRUE
+		mov qword [buffMax], rax
+
+	RequestedWasRd:
+
+	; curr = 0
+	mov qword [curr], 0
+
+; end if
+DoneRd:
+
+; Chr = buffer[curr]
+mov rcx, qword [curr]
+mov dl,  byte [buffer + rcx]
+
+; xArr[i] = Chr
+mov byte [r12 + rbx], dl
+
+; i++
+inc rbx
+
+; curr++
+inc qword [curr]
+
+; if (i < 8) then goto get next character from buffer
+cmp rbx, 8
+jl getNxtChr
+
+; maintain std call conv
+pop r15
+pop r14
+pop r13
+pop r12
+pop rbx
+
+; rax = TRUE
+mov rax, TRUE
 
 ret
 
@@ -465,16 +613,120 @@ ret
 
 ; -----
 ;  Arguments are:
-;	value of write file descriptor
-;	address of X array
-;	value of encryption flag
+;	value of write file descriptor		in rdi
+;	address of X array					in rsi
+;	value of encryption flag 			in rdx
 ;  Returns:
 ;	TRUE or FALSE
 
 global writeX
 writeX:
 
-ret
+
+	; preserve register contents
+
+	push r12
+	push r13
+	push r14
+
+	; put arguments in preserved registers
+
+	mov r12, rdi 	; value of write file descriptor
+	mov r13, rsi 	; address of X array
+	mov r14, rdx 	; value of encryption flag
+
+	; if (enc == true) then encrypt else decrypt
+	cmp r14, TRUE
+	jne DecryptFile
+
+	; -----
+	; Encrypt File
+
+			; -----
+			;  Call OS to write characters to output file.
+
+			mov	rax, SYS_write		; system code for write()
+			mov	rsi, r13			; address of char to write
+			mov	rdi, r12			; file descriptor for write file
+			mov rdx, 8				; rdx = 8 to write
+			syscall					; system call
+
+		; check for write error
+		jmp WriteErrChk
+	
+	; end if
+
+	; -----
+	; Decrypt File
+
+		DecryptFile:
+
+		; -----
+		;  Count characters to write.
+
+			mov	rdx, 0
+
+		chrCountLoop:
+
+			cmp	byte [r13+rdx], NULL
+			je	chrCountLoopDone
+
+				inc	rdx
+				jmp	chrCountLoop
+
+		chrCountLoopDone:
+
+			cmp	rdx, 0
+			je	WriteErrChk
+
+			; -----
+			;  Call OS to write characters to output file.
+
+			mov	rax, SYS_write		; system code for write()
+			mov	rsi, r13			; address of char to write
+			mov	rdi, r12			; file descriptor for write file
+									; rdx=count to write, set above
+			syscall					; system call
+
+	; -----
+	;  xArr written to file, check for write error.
+
+	WriteErrChk:
+
+	; check rax to see if the file opened successfully
+	cmp rax, 0
+	jl WriteErr
+
+		; maintain std call conv
+		pop r14
+		pop r13
+		pop r12
+
+		; return TRUE to main
+		mov rax, TRUE
+
+		ret
+
+	; -----
+	; Write Error
+ 
+	; errWrite	"Error, writting to file.", LF,
+	;		"Program terminated.", LF, NULL
+	WriteErr:
+
+		; print error
+		mov rdi, errWrite ; set argument for passing
+		call printString
+		
+		; return FALSE to main
+		mov rax, FALSE
+
+		; maintain std call conv
+		pop r14
+		pop r13
+		pop r12
+
+		ret
 
 
 

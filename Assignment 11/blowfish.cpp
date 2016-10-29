@@ -64,11 +64,11 @@ int main(int argc, char* argv[])
 
 		while (getX(readFile, xArr)) {
 
-			if (encryptFlag) {
-				blowfishEncrypt(xArr);
-			} else {
-				blowfishDecrypt(xArr);
-			}
+			// if (encryptFlag) {
+			// 	blowfishEncrypt(xArr);
+			// } else {
+			// 	blowfishDecrypt(xArr);
+			// }
 
 			writeX(writeFile, xArr, encryptFlag);
 		}
